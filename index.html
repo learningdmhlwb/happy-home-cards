@@ -10,11 +10,11 @@ header{margin-bottom:30px;display:flex;align-items:center;justify-content:center
 .logo{max-width:200px;height:auto}
 .logo img{max-width:100%;height:auto;display:block}
 h1{margin:0;color:#0078d4}
-.categories{display:flex;flex-wrap:wrap;justify-content:center;gap:30px;margin:40px 0}
+.categories{display:flex;flex-wrap:wrap;justify-content:center;gap:40px;margin:50px 0}
 .category-btn{display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:transform 0.2s;text-decoration:none;color:inherit}
 .category-btn:hover{transform:scale(1.08)}
-.category-btn img{width:280px;height:220px;border-radius:15px;object-fit:cover;box-shadow:0 6px 15px rgba(0,0,0,0.3);margin-bottom:15px}
-.category-btn span{font-weight:bold;font-size:18px;color:#1b5c8e;text-align:center;max-width:280px}
+.category-btn img{width:560px;height:440px;border-radius:15px;object-fit:cover;box-shadow:0 6px 15px rgba(0,0,0,0.3);margin-bottom:20px}
+.category-btn span{font-weight:bold;font-size:22px;color:#1b5c8e;text-align:center;max-width:560px}
 button{background:#1b5c8e;color:#fff;border:none;border-radius:8px;padding:10px 16px;margin:5px;cursor:pointer}
 #cards{display:flex;flex-wrap:wrap;justify-content:center;gap:24px}
 .card{width:500px;height:360px;perspective:1200px;cursor:pointer}
@@ -45,16 +45,16 @@ var responses=[];
 var favourites=[];
 var sessionHistory=[];
 var cardBacks={
- 'My Home':'cardback-myhome.jpeg',
- 'Things I Do':'cardback-thingsido.jpeg',
- 'Things I Like':'cardback-thingsilike.jpeg',
- 'Things I Do Not Like':'cardback-thingsidonotlike.jpeg'
+ 'My Home':'cardback-myhome.png',
+ 'Things I Do':'cardback-thingsido.png',
+ 'Things I Like':'cardback-thingsilike.png',
+ 'Things I Do Not Like':'cardback-thingsidonotlike.png'
 };
 var decks={
- 'My Home':[{t:'Eat Together',i:'image27.jpeg'},{t:'Share the Housework',i:'image28.jpeg'},{t:'Shop for Food Together',i:'image29.jpeg'}],
- 'Things I Do':[{t:'Work',i:'image36.jpeg'},{t:'Study',i:'image37.jpeg'},{t:'Appointments',i:'image38.jpeg'}],
- 'Things I Like':[{t:'Cooking',i:'image43.jpeg'},{t:'Reading',i:'image56.jpeg'},{t:'Pets',i:'image57.jpeg'},{t:'Watch or Play Sports',i:'image58.jpeg'}],
- 'Things I Do Not Like':[{t:'Smoking',i:'image59.jpeg'},{t:'Being Too Noisy',i:'image66.jpeg'}]
+ 'My Home':[{t:'Eat Together',i:'image27.png'},{t:'Share the Housework',i:'image28.png'},{t:'Shop for Food Together',i:'image29.png'}],
+ 'Things I Do':[{t:'Work',i:'image36.png'},{t:'Study',i:'image37.png'},{t:'Appointments',i:'image38.png'}],
+ 'Things I Like':[{t:'Cooking',i:'image43.png'},{t:'Reading',i:'image56.png'},{t:'Pets',i:'image57.png'},{t:'Watch or Play Sports',i:'image58.png'}],
+ 'Things I Do Not Like':[{t:'Smoking',i:'image59.png'},{t:'Being Too Noisy',i:'image66.png'}]
 };
 var app=document.getElementById('app');
 function home(){
