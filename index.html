@@ -41,7 +41,7 @@ button:focus,.category-btn:focus{outline:3px solid #ffbf47;outline-offset:2px}
 <body>
 <header>
 <div class="logo">
-<img src="https://raw.githubusercontent.com/learningdmhlwb/happy-home-cards/main/disability%20logo.png" alt="Life Without Barriers logo" onerror="this.onerror=null;this.src='https://placehold.co/400x120?text=Logo+Missing';">
+<img src="https://raw.githubusercontent.com/learningdmhlwb/happy-home-cards/main/disability%20logo.png" alt="Life Without Barriers logo" onerror="this.onerror=null;this.src='https://placehold.co/4[...]
 </div>
 <h1>Happy Home Cards</h1>
 </header>
@@ -60,20 +60,20 @@ var cardBacks={
   'Things I Do Not Like':'cardback-thingsidonotlike.jpeg'
 };
 var decks={
-  'My Home':[{t:'Eat together',i:'eat-together.jpeg'},{t:'Share the housework',i:'share-the-housework.jpeg'},{t:'Shop for food together',i:'shop-for-food-together.jpeg'},{t:'Have fun together',i:'have-fun-together.jpeg'},{t:'A clean and tidy home',i:'a-clean-and-tidy-home.jpeg'},{t:'Have quiet time',i:'have-quiet-time.jpeg'},{t:'A garden or outdoor area',i:'a-garden-or-outdoor-area.jpeg'},{t:'Share things',i:'share-things.jpeg'},{t:'Talk to each other',i:'talk-to-each-other.jpeg'}],
-  'Things I Do':[{t:'Work',i:'work.jpeg'},{t:'Study',i:'study.jpeg'},{t:'Appointments',i:'appointments.jpeg'},{t:'Day Program',i:'day-program.jpeg'},{t:'Do things with other people',i:'do-things-with-other-people.jpeg'},{t:'Exercise',i:'exercise.jpeg'},{t:'Parties',i:'parties.jpeg'}],
-  'Things I Like':[{t:'Cooking',i:'cooking.jpeg'},{t:'Reading',i:'reading.jpeg'},{t:'Pets',i:'pets.jpeg'},{t:'Watch or Play Sports',i:'watch-or-play-sports.jpeg'},{t:'Watch a TV Show or movie',i:'watch-a-tv-show-or-movie.jpeg'},{t:'Play or listen to music',i:'play-or-listen-to-music.jpeg'},{t:'Dance',i:'dance.jpeg'},{t:'Gardening',i:'gardening.jpeg'},{t:'Be outdoors',i:'be-outdoors.jpeg'},{t:'Dance',i:'dance.jpeg'},{t:'Time with my family and friends',i:'time-with-family-and-friends.jpeg'},{t:'Video games',i:'video-games.jpeg'},{t:'Art and craft',i:'art-and-craft.jpeg'},{t:'Religion',i:'religion.jpeg'},{t:'Holidays and travel to places',i:'holidays-and-travel-to-places.jpeg'},{t:'Unpaid work in the community',i:'unpaid-work-in-the-community.jpeg'},{t:'Board games',i:'board-games.jpeg'}],
-  'Things I Do Not Like':[{t:'Smoking',i:'smoking.jpeg'},{t:'Being too noisy',i:'being-too-noisy.jpeg'},{t:'Leaving me out of things',i:'leaving-me-out-of-things.jpeg'},{t:'Not helping with housework',i:'not-helping-with-housework.jpeg'},{t:'Say or do things that hurt me',i:'say-or-do-things-that-hurt-me.jpeg'},{t:'Dirty and messy areas',i:'dirty-and-messy-areas.jpeg'},{t:'Taking my things without asking',i:'taking-my-things-without-asking.jpeg'},{t:'Bullying',i:'bullying.jpeg'}]
+  'My Home':[{t:'Eat together',i:'eat-together.jpeg'},{t:'Share the housework',i:'share-the-housework.jpeg'},{t:'Shop for food together',i:'shop-for-food-together.jpeg'},{t:'Have fun together',i:'[...]
+  'Things I Do':[{t:'Work',i:'work.jpeg'},{t:'Study',i:'study.jpeg'},{t:'Appointments',i:'appointments.jpeg'},{t:'Day Program',i:'day-program.jpeg'},{t:'Do things with other people',i:'do-things-w[...]
+  'Things I Like':[{t:'Cooking',i:'cooking.jpeg'},{t:'Reading',i:'reading.jpeg'},{t:'Pets',i:'pets.jpeg'},{t:'Watch or Play Sports',i:'watch-or-play-sports.jpeg'},{t:'Watch a TV Show or movie',i:'[...]
+  'Things I Do Not Like':[{t:'Smoking',i:'smoking.jpeg'},{t:'Being too noisy',i:'being-too-noisy.jpeg'},{t:'Leaving me out of things',i:'leaving-me-out-of-things.jpeg'},{t:'Not helping with housew[...]
 };
 var app=document.getElementById('app');
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[ch];});}
-function imgTag(src, alt, cls){return '<img class="'+(cls||'')+'" src="'+src+'" alt="'+escapeHtml(alt)+'" onerror="this.onerror=null;this.src=\''+fallbackImageBase+'\';this.alt=\''+escapeHtml(alt)+' (missing)\';">';}
+function imgTag(src, alt, cls){return '<img class="'+(cls||'')+'" src="'+src+'" alt="'+escapeHtml(alt)+'" onerror="this.onerror=null;this.src=\''+fallbackImageBase+'\';this.alt=\''+escapeHtml(alt)[...]
 function home(){
 var h='<h2>Select Category</h2><div class="categories">';
 for(var k in decks){
 if(Object.prototype.hasOwnProperty.call(decks,k)){
 var backSrc=imageBase+cardBacks[k];
-h+='<div class="category-btn" tabindex="0" role="button" aria-label="Open '+escapeHtml(k)+'" onclick="draw(\''+k+'\')" onkeydown="if(event.key===\'Enter\' || event.key===\' \'){event.preventDefault();draw(\''+k+'\')}" ><img src="'+backSrc+'" alt="'+escapeHtml(k)+' category" onerror="this.onerror=null;this.src=\''+fallbackImageBase+'\';this.alt=\''+escapeHtml(k)+' category (missing)\';"><span>'+escapeHtml(k)+'</span></div>';
+h+='<div class="category-btn" tabindex="0" role="button" aria-label="Open '+escapeHtml(k)+'" onclick="draw(\''+k+'\')" onkeydown="if(event.key===\'Enter\' || event.key===\' \'){event.preventDefaul[...]
 }
 }
 h+='</div><div><button id="rep">Report</button></div>';
@@ -91,16 +91,16 @@ for(var i=0;i<arr.length;i++){
 var c=arr[i];
 var frontSrc=imageBase+(cardBacks[cat]||'');
 var backSrc=imageBase+c.i;
-h+='<div class="card" role="button" tabindex="0" aria-label="Flip card '+escapeHtml(c.t)+'"><div class="inner"><div class="face front">'+imgTag(frontSrc,'Card Back','')+'</div><div class="face back"><div class="art">'+imgTag(backSrc,c.t,'')+'</div><div class="title"><span>'+escapeHtml(c.t)+'</span><div class="card-buttons"><button class="speak" type="button" onclick="event.stopPropagation()">🔊</button><button class="preference-btn" type="button" data-title="'+escapeHtml(c.t)+'" data-action="'+(isDislikeCategory?'dislike':'favourite')+'" title="'+(isDislikeCategory?'Dislike':'Favourite')+'" aria-label="'+(isDislikeCategory?'Dislike':'Favourite')+' '+escapeHtml(c.t)+'" onclick="event.stopPropagation()">'+(isDislikeCategory?'👎':'❤️')+'</button></div></div></div></div></div>';
+h+='<div class="card" role="button" tabindex="0" aria-label="Flip card '+escapeHtml(c.t)+'"><div class="inner"><div class="face front">'+imgTag(frontSrc,'Card Back','')+'</div><div class="face bac[...]
 }
 h+='</div><div><button id="reflect">Reflection</button><button id="reshuffle">🎲 Shuffle New Cards</button><button id="homeBtn">Home</button></div>';
 app.innerHTML=h;
 var cards=document.querySelectorAll('.card');
-for(var i=0;i<cards.length;i++){cards[i].onclick=function(){this.classList.toggle('flipped');};cards[i].onkeydown=function(event){if(event.key==='Enter' || event.key===' '){event.preventDefault();this.classList.toggle('flipped');}};}
+for(var i=0;i<cards.length;i++){cards[i].onclick=function(){this.classList.toggle('flipped');};cards[i].onkeydown=function(event){if(event.key==='Enter' || event.key===' '){event.preventDefault();[...]
 var speaks=document.querySelectorAll('.speak');
-for(var j=0;j<speaks.length;j++){speaks[j].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();var text=this.closest('.title').querySelector('span').textContent;speechSynthesis.speak(new SpeechSynthesisUtterance(text));}};}
+for(var j=0;j<speaks.length;j++){speaks[j].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();var text=this.closest('.title').querySelector('span').t[...]
 var preferences=document.querySelectorAll('.preference-btn');
-for(var m=0;m<preferences.length;m++){preferences[m].onclick=function(e){e.stopPropagation();var card=this.closest('.card');var action=this.getAttribute('data-action');var selectedClass=action==='dislike'?'disliked':'favourite';if(card){card.classList.toggle(selectedClass);}var t=this.getAttribute('data-title');var targetList=action==='dislike'?dislikes:favourites;var idx=targetList.indexOf(t);if(idx===-1){targetList.push(t);}else{targetList.splice(idx,1);}};}
+for(var m=0;m<preferences.length;m++){preferences[m].onclick=function(e){e.stopPropagation();var card=this.closest('.card');var action=this.getAttribute('data-action');var selectedClass=action==='dislike'?'disliked':'favourite';var cardTitle=card.querySelector('span').textContent;if(card.classList.toggle(selectedClass)){if(action==='favourite'){if(favourites.indexOf(cardTitle)===-1){favourites.push(cardTitle);}}else{if(dislikes.indexOf(cardTitle)===-1){dislikes.push(cardTitle);}}}else{if(action==='favourite'){favourites=favourites.filter(function(f){return f!==cardTitle;});}else{dislikes=dislikes.filter(function(d){return d!==cardTitle;});}}};}
 document.getElementById('reflect').onclick=function(){var r=prompt('Why are these important?');if(r){responses.push({category:cat,text:r,date:new Date().toLocaleString()});}};
 document.getElementById('reshuffle').onclick=function(){draw(cat);};
 document.getElementById('homeBtn').onclick=home;
