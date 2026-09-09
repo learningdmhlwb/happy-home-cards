@@ -82,7 +82,7 @@ app.innerHTML=h;
 document.getElementById('rep').onclick=report;
 }
 function draw(cat){app.innerHTML='<h2>'+escapeHtml(cat)+'</h2><div class="shuffle">🎲 Shuffling Cards...</div>';setTimeout(function(){showCards(cat);},1200);}
-function checkAllFlipped(){var cards=document.querySelectorAll('.card');var allFlipped=true;for(var i=0;i<cards.length;i++){if(!cards[i].classList.contains('flipped')){allFlipped=false;break;}}if(allFlipped){var shuffleEl=document.querySelector('.shuffle');if(shuffleEl){shuffleEl.classList.add('done');}}}
+function checkAllFlipped(){var cards=document.querySelectorAll('.card');var allFlipped=true;for(var i=0;i<cards.length;i++){if(!cards[i].classList.contains('flipped')){allFlipped=false;break;}}if([...]
 function showCards(cat){try{
 if(!decks[cat]) throw new Error('Category not found');
 var isDislikeCategory=cat==='Things I Do Not Like';
@@ -91,18 +91,18 @@ if(arr.length>0){sessionHistory.push({category:cat,cards:arr.map(function(c){ret
 var h='<h2>'+escapeHtml(cat)+'</h2><div id="cards">';
 for(var i=0;i<arr.length;i++){
 var c=arr[i];
-var frontSrc=imageBase+(cardBacks[cat]||'');
-var backSrc=imageBase+c.i;
+var frontSrc=imageBase+c.i;
+var backSrc=imageBase+(cardBacks[cat]||'');
 h+='<div class="card" role="button" tabindex="0" aria-label="Flip card '+escapeHtml(c.t)+'"><div class="inner"><div class="face front">'+imgTag(frontSrc,'Card Back','')+'</div><div class="face bac[...]
 }
 h+='</div><div><button id="reflect">Reflection</button><button id="reshuffle">🎲 Shuffle New Cards</button><button id="homeBtn">Home</button></div>';
 app.innerHTML=h;
 var cards=document.querySelectorAll('.card');
-for(var i=0;i<cards.length;i++){cards[i].onclick=function(){this.classList.toggle('flipped');checkAllFlipped();};cards[i].onkeydown=function(event){if(event.key==='Enter' || event.key===' '){event.preventDefault();this.classList.toggle('flipped');checkAllFlipped();}};}
+for(var i=0;i<cards.length;i++){cards[i].onclick=function(){this.classList.toggle('flipped');checkAllFlipped();};cards[i].onkeydown=function(event){if(event.key==='Enter' || event.key===' '){even[...]
 var speaks=document.querySelectorAll('.speak');
 for(var j=0;j<speaks.length;j++){speaks[j].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();var text=this.closest('.title').querySelector('span').t[...]
 var preferences=document.querySelectorAll('.preference-btn');
-for(var m=0;m<preferences.length;m++){preferences[m].onclick=function(e){e.stopPropagation();var card=this.closest('.card');var action=this.getAttribute('data-action');var selectedClass=action==='dislike'?'disliked':'favourite';var cardTitle=card.querySelector('span').textContent;if(card.classList.toggle(selectedClass)){if(action==='favourite'){if(favourites.indexOf(cardTitle)===-1){favourites.push(cardTitle);}}else{if(dislikes.indexOf(cardTitle)===-1){dislikes.push(cardTitle);}}}else{if(action==='favourite'){favourites=favourites.filter(function(f){return f!==cardTitle;});}else{dislikes=dislikes.filter(function(d){return d!==cardTitle;});}}};}
+for(var m=0;m<preferences.length;m++){preferences[m].onclick=function(e){e.stopPropagation();var card=this.closest('.card');var action=this.getAttribute('data-action');var selectedClass=action===[...]
 document.getElementById('reflect').onclick=function(){var r=prompt('Why are these important?');if(r){responses.push({category:cat,text:r,date:new Date().toLocaleString()});}};
 document.getElementById('reshuffle').onclick=function(){draw(cat);};
 document.getElementById('homeBtn').onclick=home;
