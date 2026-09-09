@@ -7,7 +7,7 @@
 <style>
 html{height:100%}
 body{font-family:helvetica,sans-serif;background:linear-gradient(135deg,#f0f4f8 0%,#e8f1f6 100%);padding:20px;text-align:center;margin:0;position:relative;overflow-x:hidden;min-height:100vh}
-header{margin-bottom:30px;display:flex;align-items:center;justify-content:center;gap:20px;position:relative;z-index:1}
+header{margin-bottom:30px;display:flex;align-items:center;justify-content:center;gap:20px;position:relative;z-index:1;flex-wrap:wrap}
 .logo{max-width:200px;height:auto}
 .logo img{max-width:100%;height:auto;display:block}
 h1{margin:0;color:#0078d4}
@@ -17,6 +17,7 @@ h1{margin:0;color:#0078d4}
 .category-btn img{width:100%;max-width:320px;height:280px;border-radius:15px;object-fit:cover;box-shadow:0 6px 15px rgba(0,0,0,0.3);margin-bottom:20px}
 .category-btn span{font-weight:bold;font-size:22px;color:#1b5c8e;text-align:center;max-width:280px}
 button{background:#1b5c8e;color:#fff;border:none;border-radius:8px;padding:10px 16px;margin:5px;cursor:pointer}
+button:focus,.category-btn:focus{outline:3px solid #ffbf47;outline-offset:2px}
 #cards{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;position:relative;z-index:1}
 .card{width:500px;height:360px;perspective:1200px;cursor:pointer}
 .inner{position:relative;width:100%;height:100%;transition:.8s;transform-style:preserve-3d}
@@ -40,7 +41,7 @@ button{background:#1b5c8e;color:#fff;border:none;border-radius:8px;padding:10px 
 <body>
 <header>
 <div class="logo">
-<img src="https://github.com/learningdmhlwb/happy-home-cards/blob/main/disability%20logo.png" alt="Life Without Barriers logo">
+<img src="https://raw.githubusercontent.com/learningdmhlwb/happy-home-cards/main/disability%20logo.png" alt="Life Without Barriers logo">
 </div>
 <h1>Happy Home Cards</h1>
 </header>
@@ -63,46 +64,47 @@ var decks={
   'Things I Do Not Like':[{t:'Smoking',i:'smoking.jpeg'},{t:'Being Too Noisy',i:'being-too-noisy.jpeg'},{t:'Leaving Me Out of Things',i:'leaving-me-out-of-things.jpeg'},{t:'Not Helping with Housework',i:'not-helping-with-housework.jpeg'},{t:'Arguing',i:'arguing.jpeg'},{t:'Messiness',i:'messiness.jpeg'}]
 };
 var app=document.getElementById('app');
+function escapeHtml(value){return String(value).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];});}
 function home(){
 var h='<h2>Select Category</h2><div class="categories">';
 for(var k in decks){
-h+='<div class="category-btn" onclick="draw(\''+k+'\')"><img src="'+imageBase+cardBacks[k]+'" alt="'+k+' category"><span>'+k+'</span></div>';
+if(Object.prototype.hasOwnProperty.call(decks,k)){
+h+='<div class="category-btn" tabindex="0" role="button" aria-label="Open '+escapeHtml(k)+'" onclick="draw(\''+k+'\')" onkeydown="if(event.key===\'Enter\' || event.key===\' \'){event.preventDefault();draw(\''+k+'\')}" ><img src="'+imageBase+cardBacks[k]+'" alt="'+escapeHtml(k)+' category"><span>'+escapeHtml(k)+'</span></div>';
+}
 }
 h+='</div><div><button id="rep">Report</button></div>';
 app.innerHTML=h;
 document.getElementById('rep').onclick=report;
 }
-function draw(cat){app.innerHTML='<h2>'+cat+'</h2><div class="shuffle">🎲 Shuffling Cards...</div>';setTimeout(function(){showCards(cat);},1200);}
+function draw(cat){app.innerHTML='<h2>'+escapeHtml(cat)+'</h2><div class="shuffle">🎲 Shuffling Cards...</div>';setTimeout(function(){showCards(cat);},1200);}
 function showCards(cat){try{
 if(!decks[cat]) throw new Error('Category not found');
 var arr=decks[cat].slice();arr.sort(function(){return Math.random()-0.5;});arr=arr.slice(0,2);
 if(arr.length>0){sessionHistory.push({category:cat,cards:arr.map(function(c){return c.t;})});}
-var h='<h2>'+cat+'</h2><div id="cards">';
+var h='<h2>'+escapeHtml(cat)+'</h2><div id="cards">';
 for(var i=0;i<arr.length;i++){
 var c=arr[i];
-h+='<div class="card"><div class="inner"><div class="face front"><img src="'+imageBase+cardBacks[cat]+'" alt="Card Back"></div><div class="face back"><div class="art"><img src="'+imageBase+c.i+'" alt="'+c.t+'"></div><div class="title"><span>'+c.t+'</span><div class="card-buttons"><button class="speak" onclick="event.stopPropagation()">🔊</button><button class="fav" data-title="'+c.t+'" onclick="event.stopPropagation()">❤️</button></div></div></div></div></div>';
+h+='<div class="card" role="button" tabindex="0" aria-label="Flip card '+escapeHtml(c.t)+'"><div class="inner"><div class="face front"><img src="'+imageBase+cardBacks[cat]+'" alt="Card Back"></div><div class="face back"><div class="art"><img src="'+imageBase+c.i+'" alt="'+escapeHtml(c.t)+'"></div><div class="title"><span>'+escapeHtml(c.t)+'</span><div class="card-buttons"><button class="speak" type="button" onclick="event.stopPropagation()">🔊</button><button class="fav" type="button" data-title="'+escapeHtml(c.t)+'" onclick="event.stopPropagation()">❤️</button></div></div></div></div></div>';
 }
 h+='</div><div><button id="reflect">Reflection</button><button id="reshuffle">🎲 Shuffle New Cards</button><button id="homeBtn">Home</button></div>';
 app.innerHTML=h;
 var cards=document.querySelectorAll('.card');
-for(i=0;i<cards.length;i++){cards[i].onclick=function(){this.classList.toggle('flipped');};}
+for(var i=0;i<cards.length;i++){cards[i].onclick=function(){this.classList.toggle('flipped');};cards[i].onkeydown=function(event){if(event.key==='Enter' || event.key===' '){event.preventDefault();this.classList.toggle('flipped');}};}
 var speaks=document.querySelectorAll('.speak');
-for(i=0;i<speaks.length;i++){speaks[i].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();var text=this.closest('.title').querySelector('span').textContent;speechSynthesis.speak(new SpeechSynthesisUtterance(text));}};
-}
+for(var j=0;j<speaks.length;j++){speaks[j].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();var text=this.closest('.title').querySelector('span').textContent;speechSynthesis.speak(new SpeechSynthesisUtterance(text));}};}
 var favs=document.querySelectorAll('.fav');
-for(i=0;i<favs.length;i++){favs[i].onclick=function(e){e.stopPropagation();var card=this.closest('.card');if(card){card.classList.toggle('favourite');}var t=this.getAttribute('data-title');if(favourites.indexOf(t)===-1){favourites.push(t);}else{favourites.splice(favourites.indexOf(t),1);}};
-}
-  document.getElementById('reflect').onclick=function(){var r=prompt('Why are these important?');if(r){responses.push({category:cat,text:r,date:new Date().toLocaleString()});}};
-  document.getElementById('reshuffle').onclick=function(){draw(cat);};
-  document.getElementById('homeBtn').onclick=home;
-}catch(err){app.innerHTML='<h2>Error</h2><p>'+err.message+'</p>';}}
+for(var m=0;m<favs.length;m++){favs[m].onclick=function(e){e.stopPropagation();var card=this.closest('.card');if(card){card.classList.toggle('favourite');}var t=this.getAttribute('data-title');var idx=favourites.indexOf(t);if(idx===-1){favourites.push(t);}else{favourites.splice(idx,1);}};}
+document.getElementById('reflect').onclick=function(){var r=prompt('Why are these important?');if(r){responses.push({category:cat,text:r,date:new Date().toLocaleString()});}};
+document.getElementById('reshuffle').onclick=function(){draw(cat);};
+document.getElementById('homeBtn').onclick=home;
+}catch(err){app.innerHTML='<h2>Error</h2><p>'+escapeHtml(err.message)+'</p>';}}
 function report(){
 var h='<h2>Participant Summary Report</h2>';
-h+='<div class="report"><h3>Favourite Cards</h3>'+(favourites.length?favourites.join(', '):'None selected')+'</div>';
+h+='<div class="report"><h3>Favourite Cards</h3>'+(favourites.length?escapeHtml(favourites.join(', ')):'None selected')+'</div>';
 h+='<div class="report"><h3>Session History</h3>';
 if(sessionHistory.length>0){
 for(var i=0;i<sessionHistory.length;i++){
-h+='<div class="session-item"><strong>'+sessionHistory[i].category+':</strong> '+sessionHistory[i].cards.join(', ')+'</div>';
+h+='<div class="session-item"><strong>'+escapeHtml(sessionHistory[i].category)+':</strong> '+escapeHtml(sessionHistory[i].cards.join(', '))+'</div>';
 }
 }else{
 h+='<div class="session-item">No sessions recorded</div>';
@@ -110,8 +112,8 @@ h+='<div class="session-item">No sessions recorded</div>';
 h+='</div>';
 h+='<div class="report"><h3>Responses</h3>';
 if(responses.length>0){
-for(var i=0;i<responses.length;i++){
-h+='<div class="response-item"><strong>'+responses[i].category+' ('+responses[i].date+'):</strong> '+responses[i].text+'</div>';
+for(var r=0;r<responses.length;r++){
+h+='<div class="response-item"><strong>'+escapeHtml(responses[r].category)+' ('+escapeHtml(responses[r].date)+'):</strong> '+escapeHtml(responses[r].text)+'</div>';
 }
 }else{
 h+='<div class="response-item">No reflections recorded</div>';
