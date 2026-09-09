@@ -10,6 +10,11 @@ header{margin-bottom:30px;display:flex;align-items:center;justify-content:center
 .logo{max-width:200px;height:auto}
 .logo img{max-width:100%;height:auto;display:block}
 h1{margin:0;color:#0078d4}
+.categories{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;margin:30px 0}
+.category-btn{display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:transform 0.2s;text-decoration:none;color:inherit}
+.category-btn:hover{transform:scale(1.05)}
+.category-btn img{width:150px;height:120px;border-radius:10px;object-fit:cover;box-shadow:0 4px 8px rgba(0,0,0,0.2);margin-bottom:10px}
+.category-btn span{font-weight:bold;font-size:16px;color:#1b5c8e}
 button{background:#1b5c8e;color:#fff;border:none;border-radius:8px;padding:10px 16px;margin:5px;cursor:pointer}
 #cards{display:flex;flex-wrap:wrap;justify-content:center;gap:24px}
 .card{width:500px;height:360px;perspective:1200px;cursor:pointer}
@@ -52,7 +57,15 @@ var decks={
  'Things I Do Not Like':[{t:'Smoking',i:'image59.jpeg'},{t:'Being Too Noisy',i:'image66.jpeg'}]
 };
 var app=document.getElementById('app');
-function home(){var h='<h2>Select Category</h2>';for(var k in decks){h+='<button data-cat="'+k+'">'+k+'</button>';}h+='<div><button id="rep">Report</button></div>';app.innerHTML=h;var btns=document.querySelectorAll('button[data-cat]');for(var i=0;i<btns.length;i++){btns[i].onclick=function(){draw(this.getAttribute('data-cat'));};}document.getElementById('rep').onclick=report;}
+function home(){
+var h='<h2>Select Category</h2><div class="categories">';
+for(var k in decks){
+h+='<div class="category-btn" onclick="draw(\''+k+'\')"><img src="'+imageBase+cardBacks[k]+'" alt="'+k+' category"><span>'+k+'</span></div>';
+}
+h+='</div><div><button id="rep">Report</button></div>';
+app.innerHTML=h;
+document.getElementById('rep').onclick=report;
+}
 function draw(cat){app.innerHTML='<h2>'+cat+'</h2><div class="shuffle">🎲 Shuffling Cards...</div>';setTimeout(function(){showCards(cat);},1200);}
 function showCards(cat){try{
 if(!decks[cat]) throw new Error('Category not found');
