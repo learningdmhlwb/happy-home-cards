@@ -45,16 +45,16 @@ var responses=[];
 var favourites=[];
 var sessionHistory=[];
 var cardBacks={
- 'My Home':'cardback-myhome.png',
- 'Things I Do':'cardback-thingsido.png',
- 'Things I Like':'cardback-thingsilike.png',
- 'Things I Do Not Like':'cardback-thingsidonotlike.png'
+ 'My Home':'cardback-myhome.jpeg',
+ 'Things I Do':'cardback-thingsido.jpeg',
+ 'Things I Like':'cardback-thingsilike.jpeg',
+ 'Things I Do Not Like':'cardback-thingsidonotlike.jpeg'
 };
 var decks={
- 'My Home':[{t:'Eat Together',i:'image27.png'},{t:'Share the Housework',i:'image28.png'},{t:'Shop for Food Together',i:'image29.png'}],
- 'Things I Do':[{t:'Work',i:'image36.png'},{t:'Study',i:'image37.png'},{t:'Appointments',i:'image38.png'}],
- 'Things I Like':[{t:'Cooking',i:'image43.png'},{t:'Reading',i:'image56.png'},{t:'Pets',i:'image57.png'},{t:'Watch or Play Sports',i:'image58.png'}],
- 'Things I Do Not Like':[{t:'Smoking',i:'image59.png'},{t:'Being Too Noisy',i:'image66.png'}]
+ 'My Home':[{t:'Eat Together',i:'eat-together.jpeg'},{t:'Share the Housework',i:'share-the-housework.jpeg'},{t:'Shop for Food Together',i:'shop-for-food-together.jpeg'},{t:'Talk to Each Other',i:'talk-to-each-other.jpeg'},{t:'Have Fun Together',i:'have-fun-together.jpeg'},{t:'Time with Family and Friends',i:'time-with-family-and-friends.jpeg'},{t:'Share Things',i:'share-things.jpeg'},{t:'A Clean and Tidy Home',i:'a-clean-and-tidy-home.jpeg'},{t:'A Garden or Outdoor Area',i:'a-garden-or-outdoor-area.jpeg'},{t:'Have Quiet Time',i:'have-quiet-time.jpeg'}],
+ 'Things I Do':[{t:'Work',i:'work.jpeg'},{t:'Study',i:'study.jpeg'},{t:'Appointments',i:'appointments.jpeg'},{t:'Day Program',i:'day-program.jpeg'},{t:'Do Things with Other People',i:'do-things-with-other-people.jpeg'},{t:'Exercise',i:'exercise.jpeg'},{t:'Gardening',i:'gardening.jpeg'}],
+ 'Things I Like':[{t:'Cooking',i:'cooking.jpeg'},{t:'Reading',i:'reading.jpeg'},{t:'Pets',i:'pets.jpeg'},{t:'Watch or Play Sports',i:'watch-or-play-sports.jpeg'},{t:'Watch a TV Show or Movie',i:'watch-a-tv-show-or-movie.jpeg'},{t:'Play or Listen to Music',i:'play-or-listen-to-music.jpeg'},{t:'Video Games',i:'video-games.jpeg'},{t:'Board Games',i:'board-games.jpeg'},{t:'Art and Craft',i:'art-and-craft.jpeg'},{t:'Dance',i:'dance.jpeg'},{t:'Religion',i:'religion.jpeg'},{t:'Parties',i:'parties.jpeg'},{t:'Be Outdoors',i:'be-outdoors.jpeg'},{t:'Unpaid Work in the Community',i:'unpaid-work-in-the-community.jpeg'}],
+ 'Things I Do Not Like':[{t:'Smoking',i:'smoking.jpeg'},{t:'Being Too Noisy',i:'being-too-noisy.jpeg'},{t:'Leaving Me Out of Things',i:'leaving-me-out-of-things.jpeg'},{t:'Not Helping with Housework',i:'not-helping-with-housework.jpeg'},{t:'Say or Do Things That Hurt Me',i:'say-or-do-things-that-hurt-me.jpeg'},{t:'Taking My Things Without Asking',i:'taking-my-things-without-asking.png'},{t:'Bullying',i:'bullying.jpeg'},{t:'Dirty and Messy Areas',i:'dirty-and-messy-areas.jpeg'}]
 };
 var app=document.getElementById('app');
 function home(){
@@ -74,21 +74,21 @@ if(arr.length>0){sessionHistory.push({category:cat,cards:arr.map(function(c){ret
 var h='<h2>'+cat+'</h2><div id="cards">';
 for(var i=0;i<arr.length;i++){
 var c=arr[i];
-h+='<div class="card"><div class="inner"><div class="face front"><img src="'+imageBase+cardBacks[cat]+'" alt="Card Back"></div><div class="face back"><div class="art"><img src="'+imageBase+c.i+'" alt="'+c.t+'"></div><div class="title">'+c.t+'<button class="speak" data-text="'+c.t+'" title="Speak">🔊</button><button class="fav" data-title="'+c.t+'" title="Add to Favourites">⭐</button></div></div></div></div>';
+h+='<div class="card"><div class="inner"><div class="face front"><img src="'+imageBase+cardBacks[cat]+'" alt="Card Back"></div><div class="face back"><div class="art"><img src="'+imageBase+c.i+'" alt="'+c.t+'"></div><div class="title"><button class="speak" style="background:none;border:none;cursor:pointer;font-size:20px;padding:0">🔊</button> '+c.t+' <button class="fav" data-title="'+c.t+'" style="background:none;border:none;cursor:pointer;font-size:20px;padding:0">⭐</button></div></div></div></div>';
 }
 h+='</div><button id="reflect">Reflection</button><button id="reshuffle">🎲 Shuffle New Cards</button><button id="homeBtn">Home</button>';
 app.innerHTML=h;
 var cards=document.querySelectorAll('.card');
 for(i=0;i<cards.length;i++){cards[i].onclick=function(){this.classList.toggle('flipped');};}
 var speaks=document.querySelectorAll('.speak');
-for(i=0;i<speaks.length;i++){speaks[i].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(this.getAttribute('data-text')));};};}
+for(i=0;i<speaks.length;i++){speaks[i].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(this.getAttributeNS(null,'data-title')||this.closest('.title').textContent.trim().replace('🔊','').replace('⭐','')));};};}
 var favs=document.querySelectorAll('.fav');
 for(i=0;i<favs.length;i++){favs[i].onclick=function(e){e.stopPropagation();var card=this.closest('.card');if(card){card.classList.toggle('favourite');}var t=this.getAttribute('data-title');if(favourites.indexOf(t)===-1){favourites.push(t);}else{favourites.splice(favourites.indexOf(t),1);};};}
  document.getElementById('reflect').onclick=function(){var r=prompt('Why are these important?');if(r){responses.push({category:cat,text:r,date:new Date().toLocaleString()});}};
  document.getElementById('reshuffle').onclick=function(){draw(cat);};
  document.getElementById('homeBtn').onclick=home;
 }catch(err){app.innerHTML='<h2>Error</h2><p>'+err.message+'</p>';}}
-function report(){var h='<h2>Participant Summary Report</h2>';h+='<div class="report"><h3>Favourite Cards</h3>'+(favourites.length?favourites.join(', '):'None selected')+'</div>';h+='<div class="report"><h3>Reflections</h3>';for(var i=0;i<responses.length;i++){h+='<p><strong>'+responses[i].category+':</strong> '+responses[i].text+' <em>('+responses[i].date+')</em></p>';}h+='</div><div class="report"><h3>Session History</h3>';for(var i=0;i<sessionHistory.length;i++){h+='<p><strong>'+sessionHistory[i].category+':</strong> '+sessionHistory[i].cards.join(', ')+'</p>';}h+='</div><button id="homeBtn2">Home</button>';app.innerHTML=h;document.getElementById('homeBtn2').onclick=home;}
+function report(){var h='<h2>Participant Summary Report</h2>';h+='<div class="report"><h3>Favourite Cards</h3>'+(favourites.length?favourites.join(', '):'None selected')+'</div>';h+='<div class="report"><h3>Reflections</h3>'+(responses.length?responses.map(function(r){return '<p><strong>'+r.category+':</strong> '+r.text+' ('+r.date+')</p>';}).join(''):'None recorded')+'</div>';h+='<div class="report"><h3>Session History</h3>'+(sessionHistory.length?sessionHistory.map(function(s){return '<p><strong>'+s.category+':</strong> '+s.cards.join(', ')+'</p>';}).join(''):'None recorded')+'</div>';app.innerHTML=h;}
 home();
 </script>
 </body>
