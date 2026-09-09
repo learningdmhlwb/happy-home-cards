@@ -52,7 +52,7 @@ var decks={
  'Things I Do Not Like':[{t:'Smoking',i:'image59.jpeg'},{t:'Being Too Noisy',i:'image66.jpeg'}]
 };
 var app=document.getElementById('app');
-function home(){var h='<h2>Select Category</h2>';for(var k in decks){h+='<button data-cat="'+k+'">'+k+'</button>';}h+='<div><button id="rep">Report</button></div>';app.innerHTML=h;var btns=documen[...]
+function home(){var h='<h2>Select Category</h2>';for(var k in decks){h+='<button data-cat="'+k+'">'+k+'</button>';}h+='<div><button id="rep">Report</button></div>';app.innerHTML=h;var btns=document.querySelectorAll('button[data-cat]');for(var i=0;i<btns.length;i++){btns[i].onclick=function(){draw(this.getAttribute('data-cat'));};}document.getElementById('rep').onclick=report;}
 function draw(cat){app.innerHTML='<h2>'+cat+'</h2><div class="shuffle">🎲 Shuffling Cards...</div>';setTimeout(function(){showCards(cat);},1200);}
 function showCards(cat){try{
 if(!decks[cat]) throw new Error('Category not found');
@@ -61,21 +61,21 @@ if(arr.length>0){sessionHistory.push({category:cat,cards:arr.map(function(c){ret
 var h='<h2>'+cat+'</h2><div id="cards">';
 for(var i=0;i<arr.length;i++){
 var c=arr[i];
-h+='<div class="card"><div class="inner"><div class="face front"><img src="'+imageBase+cardBacks[cat]+'" alt="Card Back"></div><div class="face back"><div class="art"><img src="'+imageBase+c.i+'" [...]
+h+='<div class="card"><div class="inner"><div class="face front"><img src="'+imageBase+cardBacks[cat]+'" alt="Card Back"></div><div class="face back"><div class="art"><img src="'+imageBase+c.i+'" alt="'+c.t+'"></div><div class="title">'+c.t+'<button class="speak" data-text="'+c.t+'" title="Speak">🔊</button><button class="fav" data-title="'+c.t+'" title="Add to Favourites">⭐</button></div></div></div></div>';
 }
 h+='</div><button id="reflect">Reflection</button><button id="reshuffle">🎲 Shuffle New Cards</button><button id="homeBtn">Home</button>';
 app.innerHTML=h;
 var cards=document.querySelectorAll('.card');
 for(i=0;i<cards.length;i++){cards[i].onclick=function(){this.classList.toggle('flipped');};}
 var speaks=document.querySelectorAll('.speak');
-for(i=0;i<speaks.length;i++){speaks[i].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(this.getA[...]
+for(i=0;i<speaks.length;i++){speaks[i].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(this.getAttribute('data-text')));};};}
 var favs=document.querySelectorAll('.fav');
-for(i=0;i<favs.length;i++){favs[i].onclick=function(e){e.stopPropagation();var card=this.closest('.card');if(card){card.classList.toggle('favourite');}var t=this.getAttribute('data-title');if(favo[...]
+for(i=0;i<favs.length;i++){favs[i].onclick=function(e){e.stopPropagation();var card=this.closest('.card');if(card){card.classList.toggle('favourite');}var t=this.getAttribute('data-title');if(favourites.indexOf(t)===-1){favourites.push(t);}else{favourites.splice(favourites.indexOf(t),1);};};}
  document.getElementById('reflect').onclick=function(){var r=prompt('Why are these important?');if(r){responses.push({category:cat,text:r,date:new Date().toLocaleString()});}};
  document.getElementById('reshuffle').onclick=function(){draw(cat);};
  document.getElementById('homeBtn').onclick=home;
 }catch(err){app.innerHTML='<h2>Error</h2><p>'+err.message+'</p>';}}
-function report(){var h='<h2>Participant Summary Report</h2>';h+='<div class="report"><h3>Favourite Cards</h3>'+(favourites.length?favourites.join(', '):'None selected')+'</div>';h+='<div class="r[...]
+function report(){var h='<h2>Participant Summary Report</h2>';h+='<div class="report"><h3>Favourite Cards</h3>'+(favourites.length?favourites.join(', '):'None selected')+'</div>';h+='<div class="report"><h3>Reflections</h3>';for(var i=0;i<responses.length;i++){h+='<p><strong>'+responses[i].category+':</strong> '+responses[i].text+' <em>('+responses[i].date+')</em></p>';}h+='</div><div class="report"><h3>Session History</h3>';for(var i=0;i<sessionHistory.length;i++){h+='<p><strong>'+sessionHistory[i].category+':</strong> '+sessionHistory[i].cards.join(', ')+'</p>';}h+='</div><button id="homeBtn2">Home</button>';app.innerHTML=h;document.getElementById('homeBtn2').onclick=home;}
 home();
 </script>
 </body>
