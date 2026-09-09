@@ -30,6 +30,7 @@ button:focus,.category-btn:focus{outline:3px solid #ffbf47;outline-offset:2px}
 .favourite,.disliked{border:5px solid gold!important;box-shadow:0 0 25px gold!important}
 .report{background:#fff;padding:12px;margin:10px auto;max-width:900px;border-radius:10px;text-align:left;position:relative;z-index:1}
 .shuffle{font-size:28px;animation:shake .4s 5}
+.shuffle.done{animation:none}
 .session-item{margin:10px 0;padding:10px;background:#f9f9f9;border-left:4px solid #1b5c8e}
 .response-item{margin:10px 0;padding:10px;background:#f9f9f9;border-left:4px solid #27ae60}
 .card-buttons{display:flex;gap:5px}
@@ -81,6 +82,7 @@ app.innerHTML=h;
 document.getElementById('rep').onclick=report;
 }
 function draw(cat){app.innerHTML='<h2>'+escapeHtml(cat)+'</h2><div class="shuffle">🎲 Shuffling Cards...</div>';setTimeout(function(){showCards(cat);},1200);}
+function checkAllFlipped(){var cards=document.querySelectorAll('.card');var allFlipped=true;for(var i=0;i<cards.length;i++){if(!cards[i].classList.contains('flipped')){allFlipped=false;break;}}if(allFlipped){var shuffleEl=document.querySelector('.shuffle');if(shuffleEl){shuffleEl.classList.add('done');}}}
 function showCards(cat){try{
 if(!decks[cat]) throw new Error('Category not found');
 var isDislikeCategory=cat==='Things I Do Not Like';
@@ -96,7 +98,7 @@ h+='<div class="card" role="button" tabindex="0" aria-label="Flip card '+escapeH
 h+='</div><div><button id="reflect">Reflection</button><button id="reshuffle">🎲 Shuffle New Cards</button><button id="homeBtn">Home</button></div>';
 app.innerHTML=h;
 var cards=document.querySelectorAll('.card');
-for(var i=0;i<cards.length;i++){cards[i].onclick=function(){this.classList.toggle('flipped');};cards[i].onkeydown=function(event){if(event.key==='Enter' || event.key===' '){event.preventDefault();[...]
+for(var i=0;i<cards.length;i++){cards[i].onclick=function(){this.classList.toggle('flipped');checkAllFlipped();};cards[i].onkeydown=function(event){if(event.key==='Enter' || event.key===' '){event.preventDefault();this.classList.toggle('flipped');checkAllFlipped();}};}
 var speaks=document.querySelectorAll('.speak');
 for(var j=0;j<speaks.length;j++){speaks[j].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();var text=this.closest('.title').querySelector('span').t[...]
 var preferences=document.querySelectorAll('.preference-btn');
