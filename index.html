@@ -6,6 +6,10 @@
 <title>Happy Home Cards</title>
 <style>
 body{font-family:Arial,sans-serif;background:#eef3f7;padding:20px;text-align:center;margin:0}
+header{margin-bottom:30px;display:flex;align-items:center;justify-content:center;gap:20px}
+.logo{max-width:200px;height:auto}
+.logo img{max-width:100%;height:auto;display:block}
+h1{margin:0;color:#0078d4}
 button{background:#0078d4;color:#fff;border:none;border-radius:8px;padding:10px 16px;margin:5px;cursor:pointer}
 #cards{display:flex;flex-wrap:wrap;justify-content:center;gap:24px}
 .card{width:500px;height:360px;perspective:1200px;cursor:pointer}
@@ -23,7 +27,12 @@ button{background:#0078d4;color:#fff;border:none;border-radius:8px;padding:10px 
 </style>
 </head>
 <body>
+<header>
+<div class="logo">
+<img src="disability logo.png" alt="Life Without Barriers logo">
+</div>
 <h1>Happy Home Cards Version 10.3</h1>
+</header>
 <div id="app"></div>
 <script>
 var imageBase='';
@@ -43,7 +52,7 @@ var decks={
  'Things I Do Not Like':[{t:'Smoking',i:'image59.jpeg'},{t:'Being Too Noisy',i:'image66.jpeg'}]
 };
 var app=document.getElementById('app');
-function home(){var h='<h2>Select Category</h2>';for(var k in decks){h+='<button data-cat="'+k+'">'+k+'</button>';}h+='<div><button id="rep">Report</button></div>';app.innerHTML=h;var btns=document.querySelectorAll('[data-cat]');for(var i=0;i<btns.length;i++){btns[i].onclick=function(){draw(this.getAttribute('data-cat'));};}document.getElementById('rep').onclick=report;}
+function home(){var h='<h2>Select Category</h2>';for(var k in decks){h+='<button data-cat="'+k+'">'+k+'</button>';}h+='<div><button id="rep">Report</button></div>';app.innerHTML=h;var btns=documen[...]
 function draw(cat){app.innerHTML='<h2>'+cat+'</h2><div class="shuffle">🎲 Shuffling Cards...</div>';setTimeout(function(){showCards(cat);},1200);}
 function showCards(cat){try{
 if(!decks[cat]) throw new Error('Category not found');
@@ -52,21 +61,21 @@ if(arr.length>0){sessionHistory.push({category:cat,cards:arr.map(function(c){ret
 var h='<h2>'+cat+'</h2><div id="cards">';
 for(var i=0;i<arr.length;i++){
 var c=arr[i];
-h+='<div class="card"><div class="inner"><div class="face front"><img src="'+imageBase+cardBacks[cat]+'" alt="Card Back"></div><div class="face back"><div class="art"><img src="'+imageBase+c.i+'" alt="'+c.t+'" onerror="this.alt=\'Missing image: '+c.i+'\';"></div><div class="title">'+c.t+'</div><button class="speak" data-text="'+c.t+'">🔊 Read Aloud</button><button class="fav" data-title="'+c.t+'">⭐ Favourite</button></div></div></div>';
+h+='<div class="card"><div class="inner"><div class="face front"><img src="'+imageBase+cardBacks[cat]+'" alt="Card Back"></div><div class="face back"><div class="art"><img src="'+imageBase+c.i+'" [...]
 }
 h+='</div><button id="reflect">Reflection</button><button id="reshuffle">🎲 Shuffle New Cards</button><button id="homeBtn">Home</button>';
 app.innerHTML=h;
 var cards=document.querySelectorAll('.card');
 for(i=0;i<cards.length;i++){cards[i].onclick=function(){this.classList.toggle('flipped');};}
 var speaks=document.querySelectorAll('.speak');
-for(i=0;i<speaks.length;i++){speaks[i].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(this.getAttribute('data-text')));}};}
+for(i=0;i<speaks.length;i++){speaks[i].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(this.getA[...]
 var favs=document.querySelectorAll('.fav');
-for(i=0;i<favs.length;i++){favs[i].onclick=function(e){e.stopPropagation();var card=this.closest('.card');if(card){card.classList.toggle('favourite');}var t=this.getAttribute('data-title');if(favourites.indexOf(t)===-1){favourites.push(t);}};}
+for(i=0;i<favs.length;i++){favs[i].onclick=function(e){e.stopPropagation();var card=this.closest('.card');if(card){card.classList.toggle('favourite');}var t=this.getAttribute('data-title');if(favo[...]
  document.getElementById('reflect').onclick=function(){var r=prompt('Why are these important?');if(r){responses.push({category:cat,text:r,date:new Date().toLocaleString()});}};
  document.getElementById('reshuffle').onclick=function(){draw(cat);};
  document.getElementById('homeBtn').onclick=home;
 }catch(err){app.innerHTML='<h2>Error</h2><p>'+err.message+'</p>';}}
-function report(){var h='<h2>Participant Summary Report</h2>';h+='<div class="report"><h3>Favourite Cards</h3>'+(favourites.length?favourites.join(', '):'None selected')+'</div>';h+='<div class="report"><h3>Reflections</h3>';for(var i=0;i<responses.length;i++){h+='<p><b>'+responses[i].category+'</b><br>'+responses[i].text+'<br><small>'+responses[i].date+'</small></p>';}h+='</div><div class="report"><h3>Draw History</h3>';for(i=0;i<sessionHistory.length;i++){h+='<p><b>'+sessionHistory[i].category+':</b> '+sessionHistory[i].cards.join(', ')+'</p>';}h+='</div><button onclick="window.print()">🖨 Print Report</button><button id="homeX">Home</button>';app.innerHTML=h;document.getElementById('homeX').onclick=home;}
+function report(){var h='<h2>Participant Summary Report</h2>';h+='<div class="report"><h3>Favourite Cards</h3>'+(favourites.length?favourites.join(', '):'None selected')+'</div>';h+='<div class="r[...]
 home();
 </script>
 </body>
