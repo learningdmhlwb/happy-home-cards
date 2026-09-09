@@ -41,13 +41,14 @@ button:focus,.category-btn:focus{outline:3px solid #ffbf47;outline-offset:2px}
 <body>
 <header>
 <div class="logo">
-<img src="https://raw.githubusercontent.com/learningdmhlwb/happy-home-cards/main/disability%20logo.png" alt="Life Without Barriers logo">
+<img src="https://raw.githubusercontent.com/learningdmhlwb/happy-home-cards/main/disability%20logo.png" alt="Life Without Barriers logo" onerror="this.onerror=null;this.src='https://placehold.co/400x120?text=Logo+Missing';">
 </div>
 <h1>Happy Home Cards</h1>
 </header>
 <div id="app"></div>
 <script>
 var imageBase='https://raw.githubusercontent.com/learningdmhlwb/happy-home-cards/main/';
+var fallbackImageBase='https://placehold.co/900x600?text=Image+Missing';
 var responses=[];
 var favourites=[];
 var dislikes=[];
@@ -65,12 +66,14 @@ var decks={
   'Things I Do Not Like':[{t:'Smoking',i:'smoking.jpeg'},{t:'Being Too Noisy',i:'being-too-noisy.jpeg'},{t:'Leaving Me Out of Things',i:'leaving-me-out-of-things.jpeg'},{t:'Not Helping with Housework',i:'not-helping-with-housework.jpeg'},{t:'Arguing',i:'arguing.jpeg'},{t:'Messiness',i:'messiness.jpeg'}]
 };
 var app=document.getElementById('app');
-function escapeHtml(value){return String(value).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];});}
+function escapeHtml(value){return String(value).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[ch];});}
+function imgTag(src, alt, cls){return '<img class="'+(cls||'')+'" src="'+src+'" alt="'+escapeHtml(alt)+'" onerror="this.onerror=null;this.src=\''+fallbackImageBase+'\';this.alt=\''+escapeHtml(alt)+' (missing)\';">';}
 function home(){
 var h='<h2>Select Category</h2><div class="categories">';
 for(var k in decks){
 if(Object.prototype.hasOwnProperty.call(decks,k)){
-h+='<div class="category-btn" tabindex="0" role="button" aria-label="Open '+escapeHtml(k)+'" onclick="draw(\''+k+'\')" onkeydown="if(event.key===\'Enter\' || event.key===\' \'){event.preventDefault();draw(\''+k+'\')}" ><img src="'+imageBase+cardBacks[k]+'" alt="'+escapeHtml(k)+' category"><span>'+escapeHtml(k)+'</span></div>';
+var backSrc=imageBase+cardBacks[k];
+h+='<div class="category-btn" tabindex="0" role="button" aria-label="Open '+escapeHtml(k)+'" onclick="draw(\''+k+'\')" onkeydown="if(event.key===\'Enter\' || event.key===\' \'){event.preventDefault();draw(\''+k+'\')}" ><img src="'+backSrc+'" alt="'+escapeHtml(k)+' category" onerror="this.onerror=null;this.src=\''+fallbackImageBase+'\';this.alt=\''+escapeHtml(k)+' category (missing)\';"><span>'+escapeHtml(k)+'</span></div>';
 }
 }
 h+='</div><div><button id="rep">Report</button></div>';
@@ -86,7 +89,9 @@ if(arr.length>0){sessionHistory.push({category:cat,cards:arr.map(function(c){ret
 var h='<h2>'+escapeHtml(cat)+'</h2><div id="cards">';
 for(var i=0;i<arr.length;i++){
 var c=arr[i];
-h+='<div class="card" role="button" tabindex="0" aria-label="Flip card '+escapeHtml(c.t)+'"><div class="inner"><div class="face front"><img src="'+imageBase+cardBacks[cat]+'" alt="Card Back"></div><div class="face back"><div class="art"><img src="'+imageBase+c.i+'" alt="'+escapeHtml(c.t)+'"></div><div class="title"><span>'+escapeHtml(c.t)+'</span><div class="card-buttons"><button class="speak" type="button" onclick="event.stopPropagation()">🔊</button><button class="preference-btn" type="button" data-title="'+escapeHtml(c.t)+'" data-action="'+(isDislikeCategory?'dislike':'favourite')+'" title="'+(isDislikeCategory?'Dislike':'Favourite')+'" aria-label="'+(isDislikeCategory?'Dislike':'Favourite')+' '+escapeHtml(c.t)+'" onclick="event.stopPropagation()">'+(isDislikeCategory?'👎':'❤️')+'</button></div></div></div></div></div>';
+var frontSrc=imageBase+(cardBacks[cat]||'');
+var backSrc=imageBase+c.i;
+h+='<div class="card" role="button" tabindex="0" aria-label="Flip card '+escapeHtml(c.t)+'"><div class="inner"><div class="face front">'+imgTag(frontSrc,'Card Back','')+'</div><div class="face back"><div class="art">'+imgTag(backSrc,c.t,'')+'</div><div class="title"><span>'+escapeHtml(c.t)+'</span><div class="card-buttons"><button class="speak" type="button" onclick="event.stopPropagation()">🔊</button><button class="preference-btn" type="button" data-title="'+escapeHtml(c.t)+'" data-action="'+(isDislikeCategory?'dislike':'favourite')+'" title="'+(isDislikeCategory?'Dislike':'Favourite')+'" aria-label="'+(isDislikeCategory?'Dislike':'Favourite')+' '+escapeHtml(c.t)+'" onclick="event.stopPropagation()">'+(isDislikeCategory?'👎':'❤️')+'</button></div></div></div></div></div>';
 }
 h+='</div><div><button id="reflect">Reflection</button><button id="reshuffle">🎲 Shuffle New Cards</button><button id="homeBtn">Home</button></div>';
 app.innerHTML=h;
