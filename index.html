@@ -39,6 +39,8 @@ button{background:#1b5c8e;color:#fff;border:none;border-radius:8px;padding:10px 
 .favourite{border:5px solid gold!important;box-shadow:0 0 25px gold!important}
 .report{background:#fff;padding:12px;margin:10px auto;max-width:900px;border-radius:10px;text-align:left;position:relative;z-index:1}
 .shuffle{font-size:28px;animation:shake .4s 5}
+.session-item{margin:10px 0;padding:10px;background:#f9f9f9;border-left:4px solid #1b5c8e}
+.response-item{margin:10px 0;padding:10px;background:#f9f9f9;border-left:4px solid #27ae60}
 @keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-15px)}50%{transform:translateX(15px)}75%{transform:translateX(-15px)}100%{transform:translateX(0)}}
 @media(max-width:600px){.category-btn{flex:0 0 calc(100% - 20px)}}
 </style>
@@ -63,10 +65,10 @@ var cardBacks={
   'Things I Do Not Like':'cardback-thingsidonotlike.jpeg'
 };
 var decks={
-  'My Home':[{t:'Eat Together',i:'eat-together.jpeg'},{t:'Share the Housework',i:'share-the-housework.jpeg'},{t:'Shop for Food Together',i:'shop-for-food-together.jpeg'},{t:'Talk to Each Other',i:'tal[...]
-  'Things I Do':[{t:'Work',i:'work.jpeg'},{t:'Study',i:'study.jpeg'},{t:'Appointments',i:'appointments.jpeg'},{t:'Day Program',i:'day-program.jpeg'},{t:'Do Things with Other People',i:'do-things-with-[...]
-  'Things I Like':[{t:'Cooking',i:'cooking.jpeg'},{t:'Reading',i:'reading.jpeg'},{t:'Pets',i:'pets.jpeg'},{t:'Watch or Play Sports',i:'watch-or-play-sports.jpeg'},{t:'Watch a TV Show or Movie',i:'watc[...]
-  'Things I Do Not Like':[{t:'Smoking',i:'smoking.jpeg'},{t:'Being Too Noisy',i:'being-too-noisy.jpeg'},{t:'Leaving Me Out of Things',i:'leaving-me-out-of-things.jpeg'},{t:'Not Helping with Housework'[...]
+  'My Home':[{t:'Eat Together',i:'eat-together.jpeg'},{t:'Share the Housework',i:'share-the-housework.jpeg'},{t:'Shop for Food Together',i:'shop-for-food-together.jpeg'},{t:'Talk to Each Other',i:'talk-to-each-other.jpeg'},{t:'Watch TV or Movie Together',i:'watch-tv-or-movie-together.jpeg'},{t:'Go Out Together',i:'go-out-together.jpeg'}],
+  'Things I Do':[{t:'Work',i:'work.jpeg'},{t:'Study',i:'study.jpeg'},{t:'Appointments',i:'appointments.jpeg'},{t:'Day Program',i:'day-program.jpeg'},{t:'Do Things with Other People',i:'do-things-with-other-people.jpeg'},{t:'Hobbies',i:'hobbies.jpeg'}],
+  'Things I Like':[{t:'Cooking',i:'cooking.jpeg'},{t:'Reading',i:'reading.jpeg'},{t:'Pets',i:'pets.jpeg'},{t:'Watch or Play Sports',i:'watch-or-play-sports.jpeg'},{t:'Watch a TV Show or Movie',i:'watch-a-tv-show-or-movie.jpeg'},{t:'Music',i:'music.jpeg'}],
+  'Things I Do Not Like':[{t:'Smoking',i:'smoking.jpeg'},{t:'Being Too Noisy',i:'being-too-noisy.jpeg'},{t:'Leaving Me Out of Things',i:'leaving-me-out-of-things.jpeg'},{t:'Not Helping with Housework',i:'not-helping-with-housework.jpeg'},{t:'Arguing',i:'arguing.jpeg'},{t:'Messiness',i:'messiness.jpeg'}]
 };
 var app=document.getElementById('app');
 function home(){
@@ -86,23 +88,47 @@ if(arr.length>0){sessionHistory.push({category:cat,cards:arr.map(function(c){ret
 var h='<h2>'+cat+'</h2><div id="cards">';
 for(var i=0;i<arr.length;i++){
 var c=arr[i];
-h+='<div class="card"><div class="inner"><div class="face front"><img src="'+imageBase+cardBacks[cat]+'" alt="Card Back"></div><div class="face back"><div class="art"><img src="'+imageBase+c.i+'" alt=[...]
+h+='<div class="card"><div class="inner"><div class="face front"><img src="'+imageBase+cardBacks[cat]+'" alt="Card Back"></div><div class="face back"><div class="art"><img src="'+imageBase+c.i+'" alt="'+c.t+'"></div><div class="title">'+c.t+'<button class="speak" style="float:right">🔊</button><button class="fav" data-title="'+c.t+'" style="float:right">❤️</button></div></div></div></div>';
 }
 h+='</div><button id="reflect">Reflection</button><button id="reshuffle">🎲 Shuffle New Cards</button><button id="homeBtn">Home</button>';
 app.innerHTML=h;
 var cards=document.querySelectorAll('.card');
 for(i=0;i<cards.length;i++){cards[i].onclick=function(){this.classList.toggle('flipped');};}
 var speaks=document.querySelectorAll('.speak');
-for(i=0;i<speaks.length;i++){speaks[i].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(this.closest([...]
+for(i=0;i<speaks.length;i++){speaks[i].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(this.closest('.title').textContent.replace('🔊','')));}};
 }
 var favs=document.querySelectorAll('.fav');
-for(i=0;i<favs.length;i++){favs[i].onclick=function(e){e.stopPropagation();var card=this.closest('.card');if(card){card.classList.toggle('favourite');}var t=this.getAttribute('data-title');if(favourit[...]
+for(i=0;i<favs.length;i++){favs[i].onclick=function(e){e.stopPropagation();var card=this.closest('.card');if(card){card.classList.toggle('favourite');}var t=this.getAttribute('data-title');if(favourites.indexOf(t)===-1){favourites.push(t);}else{favourites.splice(favourites.indexOf(t),1);}};
 }
   document.getElementById('reflect').onclick=function(){var r=prompt('Why are these important?');if(r){responses.push({category:cat,text:r,date:new Date().toLocaleString()});}};
   document.getElementById('reshuffle').onclick=function(){draw(cat);};
   document.getElementById('homeBtn').onclick=home;
 }catch(err){app.innerHTML='<h2>Error</h2><p>'+err.message+'</p>';}}
-function report(){var h='<h2>Participant Summary Report</h2>';h+='<div class="report"><h3>Favourite Cards</h3>'+(favourites.length?favourites.join(', '):'None selected')+'</div>';h+='<div class="repor[...]
+function report(){
+var h='<h2>Participant Summary Report</h2>';
+h+='<div class="report"><h3>Favourite Cards</h3>'+(favourites.length?favourites.join(', '):'None selected')+'</div>';
+h+='<div class="report"><h3>Session History</h3>';
+if(sessionHistory.length>0){
+for(var i=0;i<sessionHistory.length;i++){
+h+='<div class="session-item"><strong>'+sessionHistory[i].category+':</strong> '+sessionHistory[i].cards.join(', ')+'</div>';
+}
+}else{
+h+='<div class="session-item">No sessions recorded</div>';
+}
+h+='</div>';
+h+='<div class="report"><h3>Responses</h3>';
+if(responses.length>0){
+for(var i=0;i<responses.length;i++){
+h+='<div class="response-item"><strong>'+responses[i].category+' ('+responses[i].date+'):</strong> '+responses[i].text+'</div>';
+}
+}else{
+h+='<div class="response-item">No reflections recorded</div>';
+}
+h+='</div>';
+h+='<div style="text-align:center;margin-top:20px;"><button id="backBtn">Back to Home</button></div>';
+app.innerHTML=h;
+document.getElementById('backBtn').onclick=home;
+}
 home();
 </script>
 </body>
