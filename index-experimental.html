@@ -7,7 +7,7 @@
 <title>Happy Home Cards - Experimental Build</title>
 <style>
 html{height:100%}
-body{font-family:'Atkinson Hyperlegible',sans-serif;background:linear-gradient(135deg,#f0f4f8 0%,#e8f1f6 100%);padding:20px;text-align:center;margin:0;position:relative;overflow-x:hidden;min-height:100vh}
+body{font-family:'Atkinson Hyperlegible',sans-serif;background:linear-gradient(135deg,#f0f4f8 0%,#e8f1f6 100%);padding:20px;text-align:center;margin:0;position:relative;overflow-x:hidden;min-height:100%}
 header{margin-bottom:30px;display:flex;align-items:center;justify-content:center;gap:20px;position:relative;z-index:1;flex-wrap:wrap}
 .logo{max-width:200px;height:auto}
 .logo img{max-width:100%;height:auto;display:block}
@@ -44,7 +44,7 @@ button:focus,.category-btn:focus{outline:3px solid #ffbf47;outline-offset:2px}
 <body>
 <header>
 <div class="logo">
-<img src="https://raw.githubusercontent.com/learningdmhlwb/happy-home-cards/main/disability%20logo.png" alt="Life Without Barriers logo" onerror="this.onerror=null;this.src='https://placehold.co/400x120?text=Life+Without+Barriers+Logo';">
+<img src="https://raw.githubusercontent.com/learningdmhlwb/happy-home-cards/main/disability%20logo.png" alt="Life Without Barriers logo" onerror="this.onerror=null;this.src='https://placehold.co/400x120?text=Logo+Missing';this.alt='Logo missing';">
 </div>
 <h1>Happy Home Cards</h1>
 </header>
@@ -64,10 +64,10 @@ var cardBacks={
   'Things I Do Not Like':'cardback-thingsidonotlike.jpeg'
 };
 var decks={
-    'My Home':[{t:'Eat together',i:'eat-together.jpeg'},{t:'Share the housework',i:'share-the-housework.jpeg'},{t:'Shop for food together',i:'shop-for-food-together.jpeg'},{t:'Have fun together',i:'have-fun-together.jpeg'},{t:'Share things',i:'share-things.jpeg'},{t:'Share the housework',i:'share-the-housework.jpeg'},{t:'A garden or outdoor area',i:'a-garden-or-outdoor-area.jpeg'},{t:'Have quiet time',i:'have-quiet-time.jpeg'},{t:'A clean and tidy home',i:'a-clean-and-tidy-home.jpeg'},{t:'talk to each other',i:'talk-to-each-other.jpeg'}],
-  'Things I Do':[{t:'Work',i:'work.jpeg'},{t:'Study',i:'study.jpeg'},{t:'Appointments',i:'appointments.jpeg'},{t:'Day Program',i:'day-program.jpeg'},{t:'Do things with other people',i:'do-things-with-other-people.jpeg'},{t:'Parties',i:'parties.jpeg'},{t:'Exercise',i:'exercise.jpeg'}],
-  'Things I Like':[{t:'Cooking',i:'cooking.jpeg'},{t:'Reading',i:'reading.jpeg'},{t:'Pets',i:'pets.jpeg'},{t:'Watch or play sports',i:'watch-or-play-sports.jpeg'},{t:'Watch a TV Show or movie',i:'watch-a-tv-show-or-movie.jpeg'},{t:'Play or listen to music',i:'play-or-listen-to-music.jpeg'},{t:'Board games',i:'board-games.jpeg'},{t:'Unpaid work in the community',i:'unpaid-work-in-the-community.jpeg'},{t:'Holidays and travel to places',i:'holidays-and-travel-to-places.jpeg'},{t:'Religion',i:'religion.jpeg'},{t:'Art and craft',i:'art-and-craft.jpeg'},{t:'Video games',i:'video-games.jpeg'},{t:'Time with my family and friends',i:'time-with-family-and-friends.jpeg'},{t:'Be outdoors',i:'be-outdoors.jpeg'},{t:'Gardening',i:'gardening.jpeg'},{t:'Dance',i:'dance.jpeg'}],
-  'Things I Do Not Like':[{t:'Smoking',i:'smoking.jpeg'},{t:'Being too noisy',i:'being-too-noisy.jpeg'},{t:'Leaving me out of things',i:'leaving-me-out-of-things.jpeg'},{t:'Not helping with housework',i:'not-helping-with-housework.jpeg'},{t:'Say or do things that hurt me',i:'say-or-do-things-that-hurt-me.jpeg'},{t:'Bullying',i:'bullying.jpeg'},{t:'Taking my things without asking',i:'taking-my-things-without-asking.png'},{t:'Dirty and messy areas',i:'dirty-and-messy-areas.jpeg'}]
+  'My Home':[{t:'Eat together',i:'eat-together.jpeg'},{t:'Share the housework',i:'share-the-housework.jpeg'},{t:'Shop for food together',i:'shop-for-food-together.jpeg'},{t:'Have fun together',i:'have-fun-together.jpeg'}],
+  'Things I Do':[{t:'Work',i:'work.jpeg'},{t:'Study',i:'study.jpeg'},{t:'Appointments',i:'appointments.jpeg'},{t:'Day Program',i:'day-program.jpeg'},{t:'Do things with other people',i:'do-things-with-other-people.jpeg'}],
+  'Things I Like':[{t:'Cooking',i:'cooking.jpeg'},{t:'Reading',i:'reading.jpeg'},{t:'Pets',i:'pets.jpeg'},{t:'Watch or play sports',i:'watch-or-play-sports.jpeg'},{t:'Watch a TV Show or movie',i:'watch-a-tv-show-or-movie.jpeg'}],
+  'Things I Do Not Like':[{t:'Smoking',i:'smoking.jpeg'},{t:'Being too noisy',i:'being-too-noisy.jpeg'},{t:'Leaving me out of things',i:'leaving-me-out-of-things.jpeg'},{t:'Not helping with housework',i:'not-helping-with-housework.jpeg'}]
 };
 var app=document.getElementById('app');
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[ch];});}
@@ -85,27 +85,28 @@ app.innerHTML=h;
 document.getElementById('rep').onclick=report;
 }
 function draw(cat){app.innerHTML='<h2>'+escapeHtml(cat)+'</h2><div class="shuffle">🎲 Shuffling Cards...</div>';setTimeout(function(){showCards(cat);},1200);}
-function checkAllFlipped(){var cards=document.querySelectorAll('.card');var allFlipped=true;for(var i=0;i<cards.length;i++){if(!cards[i].classList.contains('flipped')){allFlipped=false;break;}}if(allFlipped){var sh=document.querySelector('.shuffle');if(sh){sh.classList.add('done');}}}
+function stopShuffleAnimation(){var shuffleEl=document.querySelector('.shuffle');if(shuffleEl){shuffleEl.classList.add('done');}}
+function checkAllFlipped(){var cards=document.querySelectorAll('.card');var allFlipped=true;for(var i=0;i<cards.length;i++){if(!cards[i].classList.contains('flipped')){allFlipped=false;break;}}if(allFlipped){stopShuffleAnimation();}}
 function showCards(cat){try{
 if(!decks[cat]) throw new Error('Category not found');
 var isDislikeCategory=cat==='Things I Do Not Like';
 var arr=decks[cat].slice();arr.sort(function(){return Math.random()-0.5;});arr=arr.slice(0,2);
 if(arr.length>0){sessionHistory.push({category:cat,cards:arr.map(function(c){return c.t;})});}
-var h='<h2>'+escapeHtml(cat)+'</h2><div id="cards">';
+var h='<h2>'+escapeHtml(cat)+'</h2><div class="shuffle">🎲 Shuffling Cards...</div><div id="cards">';
 for(var i=0;i<arr.length;i++){
 var c=arr[i];
 var frontSrc=imageBase+(cardBacks[cat]||'');
 var backSrc=imageBase+c.i;
-h+='<div class="card" role="button" tabindex="0" aria-label="Flip card '+escapeHtml(c.t)+'"><div class="inner"><div class="face front">'+imgTag(frontSrc,'Card Back','')+'</div><div class="face back"><div class="art">'+imgTag(backSrc,c.t,'')+'</div><div class="title"><span>'+escapeHtml(c.t)+'</span><div class="card-buttons"><button class="speak" aria-label="Speak '+escapeHtml(c.t)+'">🔊</button><button class="preference-btn" data-action="'+(isDislikeCategory?'dislike':'like')+'" aria-label="'+(isDislikeCategory?'Dislike':'Like')+' '+escapeHtml(c.t)+'">'+(isDislikeCategory?'👎':'👍')+'</button></div></div></div></div></div>';
+h+='<div class="card" role="button" tabindex="0" aria-label="Flip card '+escapeHtml(c.t)+'"><div class="inner"><div class="face front">'+imgTag(frontSrc,'Card Back','')+'</div><div class="face back"><div class="art">'+imgTag(backSrc,c.t,'')+'</div><div class="title"><span>'+escapeHtml(c.t)+'</span><div class="card-buttons"><button class="speak" aria-label="Speak card title">🔊</button><button class="preference-btn" data-action="like" aria-label="Mark as favourite">⭐</button>'+(isDislikeCategory?'<button class="preference-btn" data-action="dislike" aria-label="Mark as disliked">🚫</button>':'')+'</div></div></div></div></div>';
 }
 h+='</div><div><button id="reflect">Reflection</button><button id="reshuffle">🎲 Shuffle New Cards</button><button id="homeBtn">Home</button></div>';
 app.innerHTML=h;
 var cards=document.querySelectorAll('.card');
 for(var i=0;i<cards.length;i++){cards[i].onclick=function(){this.classList.toggle('flipped');checkAllFlipped();};cards[i].onkeydown=function(event){if(event.key==='Enter' || event.key===' '){event.preventDefault();this.classList.toggle('flipped');checkAllFlipped();}};}
 var speaks=document.querySelectorAll('.speak');
-for(var j=0;j<speaks.length;j++){speaks[j].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();var text=this.closest('.title').querySelector('span').textContent;var u=new SpeechSynthesisUtterance(text);u.lang='en-AU';speechSynthesis.speak(u);}};}
+for(var j=0;j<speaks.length;j++){speaks[j].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();var text=this.closest('.title').querySelector('span').textContent;var u=new SpeechSynthesisUtterance(text);speechSynthesis.speak(u);}};}
 var preferences=document.querySelectorAll('.preference-btn');
-for(var m=0;m<preferences.length;m++){preferences[m].onclick=function(e){e.stopPropagation();var card=this.closest('.card');var action=this.getAttribute('data-action');var selectedClass=action==='like'?'favourite':'disliked';card.classList.toggle(selectedClass);var title=card.querySelector('.title span').textContent;var targetArray=action==='like'?favourites:dislikes;var oppositeArray=action==='like'?dislikes:favourites;var oppositeClass=action==='like'?'disliked':'favourite';card.classList.remove(oppositeClass);oppositeArray=oppositeArray.filter(function(item){return item!==title;});if(action==='like'){dislikes=oppositeArray;}else{favourites=oppositeArray;}if(card.classList.contains(selectedClass)){if(targetArray.indexOf(title)===-1){targetArray.push(title);}}else{targetArray=targetArray.filter(function(item){return item!==title;});}if(action==='like'){favourites=targetArray;}else{dislikes=targetArray;}};}
+for(var m=0;m<preferences.length;m++){preferences[m].onclick=function(e){e.stopPropagation();var card=this.closest('.card');var action=this.getAttribute('data-action');var selectedClass=action==='like'?'favourite':'disliked';card.classList.toggle(selectedClass);var label=card.querySelector('.title span').textContent;if(action==='like'){var idx=favourites.indexOf(label);if(card.classList.contains('favourite')){if(idx===-1) favourites.push(label);}else if(idx>-1){favourites.splice(idx,1);}}else{var didx=dislikes.indexOf(label);if(card.classList.contains('disliked')){if(didx===-1) dislikes.push(label);}else if(didx>-1){dislikes.splice(didx,1);}}};}
 document.getElementById('reflect').onclick=function(){var r=prompt('Why are these important?');if(r){responses.push({category:cat,text:r,date:new Date().toLocaleString()});}};
 document.getElementById('reshuffle').onclick=function(){draw(cat);};
 document.getElementById('homeBtn').onclick=home;
