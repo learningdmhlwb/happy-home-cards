@@ -37,7 +37,8 @@ function createDocument(){
       querySelector:function(selector){
         if(selector==='span'&&options.titleText!==undefined)return {textContent:options.titleText};
         return null;
-      }
+      },
+      remove:function(){if(options.onRemove)options.onRemove();}
     };
     if(options.classNames){
       for(const className of options.classNames){element.classList.add(className);}
@@ -50,7 +51,7 @@ function createDocument(){
     state.cards=[];
     state.speaks=[];
     state.preferences=[];
-    state.shuffle=html.indexOf('class="shuffle"')>-1?createElement({classNames:['shuffle']}):null;
+    state.shuffle=html.indexOf('class="shuffle"')>-1?createElement({classNames:['shuffle'],onRemove:function(){state.shuffle=null;}}):null;
 
     const idRegex=/id="([^"]+)"/g;
     let idMatch;
@@ -96,8 +97,8 @@ function createDocument(){
   };
 }
 
-function loadApp(){
-  const html=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8');
+function loadApp(fileName){
+  const html=fs.readFileSync(path.join(__dirname,'..',fileName||'index.html'),'utf8');
   const script=html.match(/<script>([\s\S]*)<\/script>/)[1];
   const document=createDocument();
   const speechLog=[];
@@ -129,6 +130,14 @@ test('showCards renders title, sound button, and preference button for each card
   assert.match(app.document.app.innerHTML,/<div class="title"><span>[^<]+<\/span><div class="card-buttons">/);
 });
 
+test('shuffle status is removed after cards are shown in both entry points',function(){
+  for(const fileName of ['index.html','index-experimental.html']){
+    const app=loadApp(fileName);
+    app.context.showCards('Things I Like');
+    assert.equal(app.document.querySelector('.shuffle'),null);
+  }
+});
+
 test('sound button speaks the rendered card title',function(){
   const app=loadApp();
   app.context.showCards('Things I Like');
@@ -153,5 +162,14 @@ test('html entry points load Atkinson Hyperlegible as the body font',function(){
     const html=fs.readFileSync(path.join(__dirname,'..',fileName),'utf8');
     assert.match(html,/https:\/\/fonts\.googleapis\.com\/css2\?family=Atkinson\+Hyperlegible:wght@400;700&display=swap/);
     assert.match(html,/body\{font-family:'Atkinson Hyperlegible',sans-serif/);
+  }
+});
+
+test('html entry points right-align and center card controls',function(){
+  for(const fileName of ['index.html','index-experimental.html']){
+    const html=fs.readFileSync(path.join(__dirname,'..',fileName),'utf8');
+    assert.match(html,/\.title\{[^}]*align-items:center[^}]*gap:10px/);
+    assert.match(html,/\.title span\{flex:1;text-align:left\}/);
+    assert.match(html,/\.card-buttons\{[^}]*align-items:center[^}]*justify-content:flex-end[^}]*flex:1/);
   }
 });
