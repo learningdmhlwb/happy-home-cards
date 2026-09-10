@@ -147,3 +147,11 @@ test('liking an already-favourited card does not add a duplicate entry',function
   likeButton.onclick({stopPropagation:function(){}});
   assert.equal(app.context.favourites.filter(function(title){return title===cardTitle;}).length,1);
 });
+
+test('html entry points load Atkinson Hyperlegible as the body font',function(){
+  for(const fileName of ['index.html','index-experimental.html']){
+    const html=fs.readFileSync(path.join(__dirname,'..',fileName),'utf8');
+    assert.match(html,/https:\/\/fonts\.googleapis\.com\/css2\?family=Atkinson\+Hyperlegible:wght@400;700&display=swap/);
+    assert.match(html,/body\{font-family:'Atkinson Hyperlegible',sans-serif/);
+  }
+});
