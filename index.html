@@ -32,7 +32,8 @@ button:focus,.category-btn:focus{outline:3px solid #ffbf47;outline-offset:2px}bu
 .title span{flex:1;text-align:left}
 .favourite,.disliked{border:5px solid gold!important;box-shadow:0 0 25px gold!important}
 .report{background:#fff;padding:12px;margin:10px auto;max-width:900px;border-radius:10px;text-align:left;position:relative;z-index:1}
-.shuffle{display:none}
+.shuffle{display:none;font-size:24px;padding:20px;text-align:center}
+.shuffle.active{display:block;animation:shuffle-pulse 0.6s infinite}
 .session-item{margin:10px 0;padding:10px;background:#f9f9f9;border-left:4px solid #1b5c8e}
 .response-item{margin:10px 0;padding:10px;background:#f9f9f9;border-left:4px solid #27ae60}
 .card-buttons{display:flex;gap:5px;align-items:center;justify-content:flex-end;flex:1}
@@ -44,6 +45,7 @@ button:focus,.category-btn:focus{outline:3px solid #ffbf47;outline-offset:2px}bu
 .welcome-screen .start-actions{margin-top:20px}
 .welcome-screen .play-button{font-size:24px;padding:16px 32px;border-radius:999px;background:#27ae60}
 .complete-message{margin-top:16px;font-size:18px;color:#1b5c8e;font-weight:700}
+@keyframes shuffle-pulse{0%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(1.05)}100%{opacity:1;transform:scale(1)}}
 @keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-15px)}50%{transform:translateX(15px)}75%{transform:translateX(-15px)}100%{transform:translateX(0)}}
 @media(max-width:600px){.category-btn{flex:0 0 calc(100% - 20px)}.card{width:100%}.welcome-screen h2{font-size:28px}.welcome-screen p,.welcome-screen li{font-size:18px}}
 </style>
@@ -73,17 +75,18 @@ var cardBacks={
   'Things I Do Not Like':'cardback-thingsidonotlike.jpeg'
 };
 var decks={
-   'My Home':[{t:'Eat together',i:'eat-together.jpeg'},{t:'Share the housework',i:'share-the-housework.jpeg'},{t:'Shop for food together',i:'shop-for-food-together.jpeg'},{t:'Have fun together',i:'have-fun-together.jpeg'},{t:'Share things',i:'share-things.jpeg'},{t:'Share the housework',i:'share-the-housework.jpeg'},{t:'A garden or outdoor area',i:'a-garden-or-outdoor-area.jpeg'},{t:'Have quiet time',i:'have-quiet-time.jpeg'},{t:'A clean and tidy home',i:'a-clean-and-tidy-home.jpeg'},{t:'talk to each other',i:'talk-to-each-other.jpeg'}],
-  'Things I Do':[{t:'Work',i:'work.jpeg'},{t:'Study',i:'study.jpeg'},{t:'Appointments',i:'appointments.jpeg'},{t:'Day Program',i:'day-program.jpeg'},{t:'Do things with other people',i:'do-things-with-other-people.jpeg'},{t:'Parties',i:'parties.jpeg'},{t:'Exercise',i:'exercise.jpeg'}],
-  'Things I Like':[{t:'Cooking',i:'cooking.jpeg'},{t:'Reading',i:'reading.jpeg'},{t:'Pets',i:'pets.jpeg'},{t:'Watch or play sports',i:'watch-or-play-sports.jpeg'},{t:'Watch a TV Show or movie',i:'watch-a-tv-show-or-movie.jpeg'},{t:'Play or listen to music',i:'play-or-listen-to-music.jpeg'},{t:'Board games',i:'board-games.jpeg'},{t:'Unpaid work in the community',i:'unpaid-work-in-the-community.jpeg'},{t:'Holidays and travel to places',i:'holidays-and-travel-to-places.jpeg'},{t:'Religion',i:'religion.jpeg'},{t:'Art and craft',i:'art-and-craft.jpeg'},{t:'Video games',i:'video-games.jpeg'},{t:'Time with my family and friends',i:'time-with-family-and-friends.jpeg'},{t:'Be outdoors',i:'be-outdoors.jpeg'},{t:'Gardening',i:'gardening.jpeg'},{t:'Dance',i:'dance.jpeg'}],
-  'Things I Do Not Like':[{t:'Smoking',i:'smoking.jpeg'},{t:'Being too noisy',i:'being-too-noisy.jpeg'},{t:'Leaving me out of things',i:'leaving-me-out-of-things.jpeg'},{t:'Not helping with housework',i:'not-helping-with-housework.jpeg'},{t:'Say or do things that hurt me',i:'say-or-do-things-that-hurt-me.jpeg'},{t:'Bullying',i:'bullying.jpeg'},{t:'Taking my things without asking',i:'taking-my-things-without-asking.png'},{t:'Dirty and messy areas',i:'dirty-and-messy-areas.jpeg'}]
+   'My Home':[{t:'Eat together',i:'eat-together.jpeg'},{t:'Share the housework',i:'share-the-housework.jpeg'},{t:'Shop for food together',i:'shop-for-food-together.jpeg'},{t:'Have fun together',i:'have-fun-together.jpeg'},{t:'Relax together',i:'relax-together.jpeg'},{t:'Watch films together',i:'watch-films-together.jpeg'}],
+  'Things I Do':[{t:'Work',i:'work.jpeg'},{t:'Study',i:'study.jpeg'},{t:'Appointments',i:'appointments.jpeg'},{t:'Day Program',i:'day-program.jpeg'},{t:'Do things with other people',i:'do-things-with-other-people.jpeg'},{t:'Volunteer',i:'volunteer.jpeg'}],
+  'Things I Like':[{t:'Cooking',i:'cooking.jpeg'},{t:'Reading',i:'reading.jpeg'},{t:'Pets',i:'pets.jpeg'},{t:'Watch or play sports',i:'watch-or-play-sports.jpeg'},{t:'Watch a TV Show or movie',i:'watch-a-tv-show-or-movie.jpeg'},{t:'Gardening',i:'gardening.jpeg'}],
+  'Things I Do Not Like':[{t:'Smoking',i:'smoking.jpeg'},{t:'Being too noisy',i:'being-too-noisy.jpeg'},{t:'Leaving me out of things',i:'leaving-me-out-of-things.jpeg'},{t:'Not helping with housework',i:'not-helping-with-housework.jpeg'},{t:'Arguing',i:'arguing.jpeg'},{t:'Unkindness',i:'unkindness.jpeg'}]
+};
 var app=document.getElementById('app');
 var unseenCards={};
 
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[ch];});}
-function imgTag(src, alt, cls){return '<img class="'+(cls||'')+'" src="'+src+'" alt="'+escapeHtml(alt)+'" onerror="this.onerror=null;this.src=\''+fallbackImageBase+'\';this.alt=\''+escapeHtml(alt)+' image missing\'">';}
+function imgTag(src, alt, cls){return '<img class="'+(cls||'')+'" src="'+src+'" alt="'+escapeHtml(alt)+'" onerror="this.onerror=null;this.src=\''+fallbackImageBase+'\';this.alt=\''+escapeHtml(alt)+' image\'">';}
 function welcome(){
-var h='<section class="welcome-screen"><h2>Welcome!</h2><p>Use Happy Home Cards to explore choices, talk about what matters, and build a plan together.</p><p><strong>How to use it:</strong></p><ul><li>Select a category below</li><li>Tap each card to reveal what matters</li><li>Mark your favourites and things you dislike</li><li>Share your reflections</li><li>View your summary report</li></ul><div class="start-actions"><button id="playBtn" class="play-button">Play</button></div></section>';
+var h='<section class="welcome-screen"><h2>Welcome!</h2><p>Use Happy Home Cards to explore choices, talk about what matters, and build a plan together.</p><p><strong>How to use it:</strong></p><ul><li>Select a category</li><li>Review the cards as they are revealed</li><li>Mark cards as favorites or dislikes</li><li>Add reflections about why cards matter</li><li>Get a summary report at the end</li></ul><div class="start-actions"><button class="play-button" id="playBtn">Start Playing</button></div></section>';
 app.innerHTML=h;
 document.getElementById('playBtn').onclick=home;
 }
@@ -92,44 +95,46 @@ var h='<h2>Select Category</h2><div class="categories">';
 for(var k in decks){
 if(Object.prototype.hasOwnProperty.call(decks,k)){
 var backSrc=imageBase+cardBacks[k];
-h+='<div class="category-btn" tabindex="0" role="button" aria-label="Open '+escapeHtml(k)+'" onclick="draw(\''+k+'\')" onkeydown="if(event.key===\'Enter\' || event.key===\' \'){event.preventDefault();draw(\''+k+'\')}">'+imgTag(backSrc,k+' category back')+'<span>'+escapeHtml(k)+'</span></div>';
+h+='<div class="category-btn" tabindex="0" role="button" aria-label="Open '+escapeHtml(k)+'" onclick="draw(\''+k+'\')" onkeydown="if(event.key===\'Enter\' || event.key===\' \'){event.preventDefault();draw(\''+k+'\');}">'+imgTag(backSrc,''+k+'')+'<span>'+escapeHtml(k)+'</span></div>';
 }
 }
 h+='</div><div><button id="rep">Report</button></div>';
 app.innerHTML=h;
 document.getElementById('rep').onclick=report;
 }
-function draw(cat){currentCategory=cat;unseenCards[cat]=decks[cat].slice();playLocked=false;app.innerHTML='<h2>'+escapeHtml(cat)+'</h2><div class="shuffle">🎲 Shuffling Cards...</div>';setTimeout(function(){stopShuffleAnimation();showNextCard(cat);},1000);}
-function stopShuffleAnimation(){var shuffleEl=document.querySelector('.shuffle');if(shuffleEl){shuffleEl.remove();}}
+function draw(cat){currentCategory=cat;unseenCards[cat]=decks[cat].slice();playLocked=false;app.innerHTML='<h2>'+escapeHtml(cat)+'</h2><div class="shuffle">🎲 Shuffling Cards...</div>';setTimeout(function(){showNextCard(cat);},800);}
+function stopShuffleAnimation(){var shuffleEl=document.querySelector('.shuffle');if(shuffleEl){shuffleEl.classList.remove('active');}}
 function showNextCard(cat){try{
 if(!decks[cat]) throw new Error('Category not found');
 if(!unseenCards[cat]||unseenCards[cat].length===0){
 playLocked=true;
-setTimeout(function(){home();},3000);
+var h='<h2>'+escapeHtml(cat)+'</h2><div class="report" style="text-align:center;"><h3 class="complete-message">All cards in this category have been revealed!</h3><button id="homeBtn">Back to Categories</button></div>';
+app.innerHTML=h;
+document.getElementById('homeBtn').onclick=home;
 return;
 }
-var arr=unseenCards[cat].slice(0,1);unseenCards[cat].splice(0,1);if(arr.length>0){if(sessionHistory.length===0||sessionHistory[sessionHistory.length-1].category!==cat){sessionHistory.push({category:cat,cards:[]});}
+var arr=unseenCards[cat].slice(0,2);unseenCards[cat].splice(0,2);if(arr.length>0){if(sessionHistory.length===0||sessionHistory[sessionHistory.length-1].category!==cat){sessionHistory.push({category:cat,cards:[]});}
 sessionHistory[sessionHistory.length-1].cards=sessionHistory[sessionHistory.length-1].cards.concat(arr.map(function(c){return c.t;}));}
 var h='<h2>'+escapeHtml(cat)+'</h2><div class="shuffle">🎲 Shuffling Cards...</div><div id="cards">';
 for(var i=0;i<arr.length;i++){
 var c=arr[i];
 var frontSrc=imageBase+(cardBacks[cat]||'');
 var backSrc=imageBase+c.i;
-h+='<div class="card" role="button" tabindex="0" aria-label="Flip card '+escapeHtml(c.t)+'"><div class="inner"><div class="face front">'+imgTag(frontSrc,'Card Back','')+'</div><div class="face back"><div class="art">'+imgTag(backSrc,c.t,'')+'</div><div class="title"><span>'+escapeHtml(c.t)+'</span><div class="card-buttons"><button class="speak" aria-label="Speak '+escapeHtml(c.t)+'">🔊</button><button class="preference-btn" data-action="like" aria-label="Like '+escapeHtml(c.t)+'">❤️</button><button class="preference-btn" data-action="dislike" aria-label="Dislike '+escapeHtml(c.t)+'">👎</button></div></div></div></div></div>';
+h+='<div class="card" role="button" tabindex="0" aria-label="Flip card '+escapeHtml(c.t)+'"><div class="inner"><div class="face front">'+imgTag(frontSrc,'Card Back','')+'</div><div class="face back"><div class="art">'+imgTag(backSrc,''+c.t+'')+'</div><div class="title"><span>'+escapeHtml(c.t)+'</span><div class="card-buttons"><button class="speak" aria-label="Hear '+escapeHtml(c.t)+'">🔊</button><button class="preference-btn" data-action="like" aria-label="Like '+escapeHtml(c.t)+'">👍</button><button class="preference-btn" data-action="dislike" aria-label="Dislike '+escapeHtml(c.t)+'">👎</button></div></div></div></div></div>';
 }
-var cardsRemaining=unseenCards[cat].length;var nextButtonText=cardsRemaining>0?'🎲 Next Card ('+cardsRemaining+' remaining)':'All Cards Shown';
-h+='</div><div id="actionsRow"><button id="reflect">Reflection</button><button id="reshuffle" '+(cardsRemaining===0?'disabled':'')+'">'+nextButtonText+'</button><button id="homeBtn" '+(cardsRemaining===0?'':'disabled')+'">Home</button></div>';
+var cardsRemaining=unseenCards[cat].length;var nextButtonText=cardsRemaining>0?'🎲 Next Cards ('+cardsRemaining+' remaining)':'View Report';
+h+='</div><div id="actionsRow"><button id="reflect">Reflection</button><button id="reshuffle" '+(cardsRemaining===0?'disabled':'')+'">'+nextButtonText+'</button><button id="homeBtn" '+(cardsRemaining===0?'':'disabled')+'">Back to Categories</button></div>';
 app.innerHTML=h;
-setTimeout(function(){stopShuffleAnimation();},100);
+setTimeout(function(){stopShuffleAnimation();var shuffleEl=document.querySelector('.shuffle');if(shuffleEl){shuffleEl.classList.add('active');}},100);
 var cards=document.querySelectorAll('.card');
-for(var i=0;i<cards.length;i++){cards[i].onclick=function(){if(playLocked||this.classList.contains('flipped'))return;this.classList.toggle('flipped');};cards[i].onkeydown=function(e){if(e.key==='Enter' || e.key===' '){e.preventDefault();this.classList.toggle('flipped');}};}
+for(var i=0;i<cards.length;i++){cards[i].onclick=function(){if(playLocked||this.classList.contains('flipped'))return;this.classList.toggle('flipped');};cards[i].onkeydown=function(e){if(e.key==='Enter' || e.key===' '){e.preventDefault();if(playLocked||this.classList.contains('flipped'))return;this.classList.toggle('flipped');}};}
 var speaks=document.querySelectorAll('.speak');
-for(var j=0;j<speaks.length;j++){speaks[j].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();var text=this.closest('.title').querySelector('span').textContent;speechSynthesis.speak(new SpeechSynthesisUtterance(text));}};}
+for(var j=0;j<speaks.length;j++){speaks[j].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();var text=this.closest('.title').querySelector('span').textContent;var utterance=new SpeechSynthesisUtterance(text);speechSynthesis.speak(utterance);}};}
 var preferences=document.querySelectorAll('.preference-btn');
-for(var m=0;m<preferences.length;m++){preferences[m].onclick=function(e){e.stopPropagation();var card=this.closest('.card');var action=this.getAttribute('data-action');var selectedClass=action==='like'?'favourite':'disliked';var cardTitle=card.querySelector('.title span').textContent;if(card.classList.contains(selectedClass)){card.classList.remove(selectedClass);if(action==='like'){favourites=favourites.filter(function(f){return f!==cardTitle;});}else{dislikes=dislikes.filter(function(d){return d!==cardTitle;});}}else{card.classList.add(selectedClass);if(action==='like'){if(!favourites.includes(cardTitle)){favourites.push(cardTitle);}}else{if(!dislikes.includes(cardTitle)){dislikes.push(cardTitle);}}}};}
+for(var m=0;m<preferences.length;m++){preferences[m].onclick=function(e){e.stopPropagation();var card=this.closest('.card');var action=this.getAttribute('data-action');var selectedClass=action==='like'?'favourite':'disliked';var isCurrentlySelected=card.classList.contains(selectedClass);if(!isCurrentlySelected){card.classList.toggle(selectedClass);var cardTitle=card.querySelector('.title span').textContent;if(action==='like'){if(!favourites.includes(cardTitle)){favourites.push(cardTitle);}}else{if(!dislikes.includes(cardTitle)){dislikes.push(cardTitle);}}}}};
 document.getElementById('reflect').onclick=function(){var r=prompt('Why is this important?');if(r){responses.push({category:cat,text:r,date:new Date().toLocaleString()});}};
-document.getElementById('reshuffle').onclick=function(){if(playLocked||unseenCards[cat].length===0)return;showNextCard(cat);};
-document.getElementById('homeBtn').onclick=function(){if(playLocked||unseenCards[cat].length===0){home();}};
+document.getElementById('reshuffle').onclick=function(){if(playLocked||unseenCards[cat].length===0)return;playLocked=true;app.innerHTML='<h2>'+escapeHtml(cat)+'</h2><div class="shuffle active">🎲 Shuffling Cards...</div>';setTimeout(function(){playLocked=false;showNextCard(cat);},1000);};
+document.getElementById('homeBtn').onclick=function(){if(cardsRemaining===0){home();}};
 }catch(err){app.innerHTML='<h2>Error</h2><p>'+escapeHtml(err.message)+'</p>';}}
 function report(){
 var h='<h2>Participant Summary Report</h2>';
