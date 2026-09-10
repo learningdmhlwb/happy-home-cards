@@ -86,7 +86,7 @@ var unseenCards={};
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[ch];});}
 function imgTag(src, alt, cls){return '<img class="'+(cls||'')+'" src="'+src+'" alt="'+escapeHtml(alt)+'" onerror="this.onerror=null;this.src=\''+fallbackImageBase+'\';this.alt=\''+escapeHtml(alt)+' image failed to load\'"/>';}
 function welcome(){
-var h='<section class="welcome-screen"><h2>Welcome!</h2><p>Use Happy Home Cards to explore choices, talk about what matters, and build a plan together.</p><p><strong>How to use it:</strong></p><ul><li>Select a category to start</li><li>Flip each card to see the picture and title</li><li>Mark cards as favourite or things you do not like</li><li>Add reflections about why things matter</li><li>Use the report to see your choices and feedback</li></ul><div class="start-actions"><button class="play-button" id="playBtn">Start Exploring</button></div></section>';
+var h='<section class="welcome-screen"><h2>Welcome!</h2><p>Use Happy Home Cards to explore choices, talk about what is important to you, and how you want your home to be safe and happy.</p><p><strong>How to play:</strong></p><ul><li>Select a category to start</li><li>Flip each card to see the picture and title</li><li>Mark cards as your favourite ❤️ or things you do not like👎</li><li>Add reflections about why things matter</li><li>Use the report to see your choices and feedback</li></ul><div class="start-actions"><button class="play-button" id="playBtn">Start Exploring</button></div></section>';
 app.innerHTML=h;
 document.getElementById('playBtn').onclick=home;
 }
