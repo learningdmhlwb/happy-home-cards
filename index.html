@@ -103,7 +103,7 @@ app.innerHTML=h;
 document.getElementById('rep').onclick=report;
 }
 function draw(cat){currentCategory=cat;unseenCards[cat]=decks[cat].slice();playLocked=false;app.innerHTML='<h2>'+escapeHtml(cat)+'</h2><div class="shuffle">🎲 Shuffling Cards...</div>';setTimeout(function(){showNextCard(cat);},800);}
-function stopShuffleAnimation(){var shuffleEl=document.querySelector('.shuffle');if(shuffleEl){shuffleEl.classList.remove('active');}}
+function stopShuffleAnimation(){var shuffleEl=document.querySelector('.shuffle');if(shuffleEl){shuffleEl.classList.remove('active');shuffleEl.remove();}}
 function showNextCard(cat){try{
 if(!decks[cat]) throw new Error('Category not found');
 if(!unseenCards[cat]||unseenCards[cat].length===0){
