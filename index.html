@@ -102,8 +102,22 @@ h+='</div><div><button id="rep">Report</button></div>';
 app.innerHTML=h;
 document.getElementById('rep').onclick=report;
 }
-function draw(cat){currentCategory=cat;unseenCards[cat]=decks[cat].slice();playLocked=false;app.innerHTML='<h2>'+escapeHtml(cat)+'</h2><div class="shuffle">🎲 Shuffling Cards...</div>';setTimeout(function(){showNextCard(cat);},800);}
+function draw(cat){currentCategory=cat;unseenCards[cat]=decks[cat].slice();playLocked=false;app.innerHTML='<h2>'+escapeHtml(cat)+'</h2><div class="shuffle">🎲 Shuffling Cards...</div>';attachCardEventHandlers(cat,0);setTimeout(function(){showNextCard(cat);},800);}
 function stopShuffleAnimation(){var shuffleEl=document.querySelector('.shuffle');if(shuffleEl){shuffleEl.classList.remove('active');shuffleEl.remove();}}
+function attachCardEventHandlers(cat,cardsRemaining){
+var cards=document.querySelectorAll('.card');
+for(var i=0;i<cards.length;i++){cards[i].onclick=function(){if(playLocked||this.classList.contains('flipped'))return;this.classList.toggle('flipped');};cards[i].onkeydown=function(e){if(e.key==='Enter' || e.key===' '){e.preventDefault();if(playLocked||this.classList.contains('flipped'))return;this.classList.toggle('flipped');}};}
+var speaks=document.querySelectorAll('.speak');
+for(var j=0;j<speaks.length;j++){speaks[j].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();var text=this.closest('.title').querySelector('span').textContent;speechSynthesis.speak(new SpeechSynthesisUtterance(text));}};}
+var preferences=document.querySelectorAll('.preference-btn');
+for(var m=0;m<preferences.length;m++){preferences[m].onclick=function(e){e.stopPropagation();var card=this.closest('.card');var action=this.getAttribute('data-action');var selectedClass=action==='like'?'favourite':'disliked';var title=card.querySelector('.title span').textContent;if(card.classList.contains(selectedClass)){card.classList.remove(selectedClass);if(action==='like'){favourites=favourites.filter(function(f){return f!==title;});}else{dislikes=dislikes.filter(function(d){return d!==title;});}}else{card.classList.add(selectedClass);if(action==='like'){if(!favourites.includes(title))favourites.push(title);}else{if(!dislikes.includes(title))dislikes.push(title);}}};}
+var reflectBtn=document.getElementById('reflect');
+if(reflectBtn){reflectBtn.onclick=function(){var r=prompt('Why is this important?');if(r){responses.push({category:cat,text:r,date:new Date().toLocaleString()});}};}
+var reshuffleBtn=document.getElementById('reshuffle');
+if(reshuffleBtn){reshuffleBtn.onclick=function(){if(playLocked||unseenCards[cat].length===0)return;playLocked=true;app.innerHTML='<h2>'+escapeHtml(cat)+'</h2><div class="shuffle active">🎲 Shuffling Cards...</div>';setTimeout(function(){showNextCard(cat);},800);};}
+var homeBtn=document.getElementById('homeBtn');
+if(homeBtn){homeBtn.onclick=function(){if(cardsRemaining===0){home();}};}
+}
 function showNextCard(cat){try{
 if(!decks[cat]) throw new Error('Category not found');
 if(!unseenCards[cat]||unseenCards[cat].length===0){
@@ -126,15 +140,7 @@ var cardsRemaining=unseenCards[cat].length;var nextButtonText=cardsRemaining>0?'
 h+='</div><div id="actionsRow"><button id="reflect">Reflection</button><button id="reshuffle" '+(cardsRemaining===0?'disabled':'')+'">'+nextButtonText+'</button><button id="homeBtn" '+(cardsRemaining===0?'':'')+'">Back to Categories</button></div>';
 app.innerHTML=h;
 setTimeout(function(){stopShuffleAnimation();},800);
-var cards=document.querySelectorAll('.card');
-for(var i=0;i<cards.length;i++){cards[i].onclick=function(){if(playLocked||this.classList.contains('flipped'))return;this.classList.toggle('flipped');};cards[i].onkeydown=function(e){if(e.key==='Enter' || e.key===' '){e.preventDefault();this.classList.toggle('flipped');}};}
-var speaks=document.querySelectorAll('.speak');
-for(var j=0;j<speaks.length;j++){speaks[j].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();var text=this.closest('.title').querySelector('span').textContent;speechSynthesis.speak(new SpeechSynthesisUtterance(text));}};}
-var preferences=document.querySelectorAll('.preference-btn');
-for(var m=0;m<preferences.length;m++){preferences[m].onclick=function(e){e.stopPropagation();var card=this.closest('.card');var action=this.getAttribute('data-action');var selectedClass=action==='like'?'favourite':'disliked';var title=card.querySelector('.title span').textContent;if(card.classList.contains(selectedClass)){card.classList.remove(selectedClass);if(action==='like'){favourites=favourites.filter(function(f){return f!==title;});}else{dislikes=dislikes.filter(function(d){return d!==title;});}}else{card.classList.add(selectedClass);if(action==='like'){if(!favourites.includes(title))favourites.push(title);}else{if(!dislikes.includes(title))dislikes.push(title);}}};}
-document.getElementById('reflect').onclick=function(){var r=prompt('Why is this important?');if(r){responses.push({category:cat,text:r,date:new Date().toLocaleString()});}};
-document.getElementById('reshuffle').onclick=function(){if(playLocked||unseenCards[cat].length===0)return;playLocked=true;app.innerHTML='<h2>'+escapeHtml(cat)+'</h2><div class="shuffle active">🎲 Shuffling Cards...</div>';setTimeout(function(){showNextCard(cat);},800);};
-document.getElementById('homeBtn').onclick=function(){if(cardsRemaining===0){home();}};
+attachCardEventHandlers(cat,cardsRemaining);
 playLocked=false;
 }catch(err){app.innerHTML='<h2>Error</h2><p>'+escapeHtml(err.message)+'</p>';}}
 function report(){
