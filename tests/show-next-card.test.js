@@ -61,7 +61,10 @@ function createDocument(){
 
 function loadApp(){
   const html=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8');
-  const script=html.match(/<script>([\s\S]*)<\/script>/)[1];
+  const lowerHtml=html.toLowerCase();
+  const scriptOpen=lowerHtml.indexOf('<script>');
+  const scriptClose=lowerHtml.lastIndexOf('</script>');
+  const script=html.slice(scriptOpen+8,scriptClose);
   const document=createDocument();
   const context={
     document:document,
