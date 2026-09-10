@@ -93,7 +93,7 @@ for(var i=0;i<arr.length;i++){
 var c=arr[i];
 var frontSrc=imageBase+(cardBacks[cat]||'');
 var backSrc=imageBase+c.i;
-h+='<div class="card" role="button" tabindex="0" aria-label="Flip card '+escapeHtml(c.t)+'"><div class="inner"><div class="face front">'+imgTag(frontSrc,'Card Back','')+'</div><div class="face back">'+imgTag(backSrc,escapeHtml(c.t),'')+'</div></div></div>';
+h+='<div class="card" role="button" tabindex="0" aria-label="Flip card '+escapeHtml(c.t)+'"><div class="inner"><div class="face front">'+imgTag(frontSrc,'Card Back','')+'</div><div class="face back"><div class="art">'+imgTag(backSrc,escapeHtml(c.t),'')+'</div><div class="title"><span>'+escapeHtml(c.t)+'</span><div class="card-buttons"><button class="speak" type="button" title="Play sound" aria-label="Play sound for '+escapeHtml(c.t)+'">🔊</button><button class="preference-btn" type="button" data-title="'+escapeHtml(c.t)+'" data-action="'+(isDislikeCategory?'dislike':'like')+'" title="'+(isDislikeCategory?'Dislike':'Favourite')+'" aria-label="'+(isDislikeCategory?'Dislike':'Favourite')+' '+escapeHtml(c.t)+'">'+(isDislikeCategory?'👎':'❤️')+'</button></div></div></div></div></div>';
 }
 h+='</div><div><button id="reflect">Reflection</button><button id="reshuffle">🎲 Shuffle New Cards</button><button id="homeBtn">Home</button></div>';
 app.innerHTML=h;
@@ -102,7 +102,7 @@ for(var i=0;i<cards.length;i++){cards[i].onclick=function(){this.classList.toggl
 var speaks=document.querySelectorAll('.speak');
 for(var j=0;j<speaks.length;j++){speaks[j].onclick=function(e){e.stopPropagation();if('speechSynthesis' in window){speechSynthesis.cancel();var text=this.closest('.title').querySelector('span').textContent;speechSynthesis.speak(new SpeechSynthesisUtterance(text));}}}
 var preferences=document.querySelectorAll('.preference-btn');
-for(var m=0;m<preferences.length;m++){preferences[m].onclick=function(e){e.stopPropagation();var card=this.closest('.card');var action=this.getAttribute('data-action');var selectedClass=action==='like'?'favourite':'disliked';if(card.classList.contains(selectedClass)){card.classList.remove(selectedClass);if(action==='like'){var idx=favourites.indexOf(c.t);if(idx>-1)favourites.splice(idx,1);}else{var idx=dislikes.indexOf(c.t);if(idx>-1)dislikes.splice(idx,1);}}else{card.classList.add(selectedClass);if(action==='like'){if(favourites.indexOf(c.t)===-1)favourites.push(c.t);}else{if(dislikes.indexOf(c.t)===-1)dislikes.push(c.t);}}}}
+for(var m=0;m<preferences.length;m++){preferences[m].onclick=function(e){e.stopPropagation();var card=this.closest('.card');var action=this.getAttribute('data-action');var selectedClass=action==='like'?'favourite':'disliked';var cardTitle=this.getAttribute('data-title');if(card.classList.contains(selectedClass)){card.classList.remove(selectedClass);if(action==='like'){var idx=favourites.indexOf(cardTitle);if(idx>-1)favourites.splice(idx,1);}else{var idx=dislikes.indexOf(cardTitle);if(idx>-1)dislikes.splice(idx,1);}}else{card.classList.add(selectedClass);if(action==='like'){if(favourites.indexOf(cardTitle)===-1)favourites.push(cardTitle);}else{if(dislikes.indexOf(cardTitle)===-1)dislikes.push(cardTitle);}}}}
 document.getElementById('reflect').onclick=function(){var r=prompt('Why are these important?');if(r){responses.push({category:cat,text:r,date:new Date().toLocaleString()});}};
 document.getElementById('reshuffle').onclick=function(){draw(cat);};
 document.getElementById('homeBtn').onclick=home;
