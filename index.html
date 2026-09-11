@@ -136,7 +136,7 @@ var frontSrc=imageBase+(cardBacks[cat]||'');
 var backSrc=imageBase+c.i;
 h+='<div class="card" role="button" tabindex="0" aria-label="Flip card '+escapeHtml(c.t)+'"><div class="inner"><div class="face front">'+imgTag(frontSrc,'Card Back','')+'</div><div class="face back"><div class="art">'+imgTag(backSrc,c.t,'')+'</div><div class="title"><span>'+escapeHtml(c.t)+'</span><div class="card-buttons"><button class="speak" aria-label="Speak '+escapeHtml(c.t)+'">🔊</button><button class="preference-btn" data-action="like" aria-label="Mark '+escapeHtml(c.t)+' as favourite">❤️</button><button class="preference-btn" data-action="dislike" aria-label="Mark '+escapeHtml(c.t)+' as disliked">👎</button></div></div></div></div></div>';
 }
-var cardsRemaining=unseenCards[cat].length;var nextButtonText=cardsRemaining>0?'🎲 Next Cards ('+cardsRemaining+' remaining)':'View Report';
+var cardsRemaining=unseenCards[cat].length;var nextButtonText=cardsRemaining>0?'🎲 Next Cards ('+cardsRemaining+' remaining)':'End of category';
 h+='</div><div id="actionsRow"><button id="reflect">Reflection</button><button id="reshuffle" '+(cardsRemaining===0?'disabled':'')+'">'+nextButtonText+'</button><button id="homeBtn" '+(cardsRemaining===0?'':'')+'">Back to Categories</button></div>';
 app.innerHTML=h;
 setTimeout(function(){stopShuffleAnimation();},800);
